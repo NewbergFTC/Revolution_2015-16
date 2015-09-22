@@ -11,6 +11,7 @@ android {
 }
 
 repositories {
+    mavenCentral()
     flatDir {
         dirs 'libs'
     }
@@ -24,4 +25,7 @@ dependencies {
     compile (name:'FtcCommon-release', ext:'aar')
     compile (name:'WirelessP2p-release', ext:'aar')
     compile (name:'Analytics-release', ext:'aar')
+
+    compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.6'
 }
