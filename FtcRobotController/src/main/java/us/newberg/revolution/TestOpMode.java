@@ -2,6 +2,9 @@ package us.newberg.revolution;
 
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.LegacyModule;
 
 /**
  * revolution-2015-16
@@ -9,15 +12,23 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
  */
 public class TestOpMode extends OpMode
 {
+    LegacyModule legacyModule;
+    DcMotorController motorController;
+    DcMotor motor;
+
     @Override
     public void init()
     {
         DbgLog.msg("Init!");
+
+        legacyModule = hardwareMap.legacyModule.get("leg");
+        motorController = hardwareMap.dcMotorController.get("con");
+        motor = hardwareMap.dcMotor.get("mot");
     }
 
     @Override
     public void loop()
     {
-        DbgLog.msg("Loop!");
+        motor.setPower(1);
     }
 }
