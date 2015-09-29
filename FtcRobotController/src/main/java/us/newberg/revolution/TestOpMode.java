@@ -3,11 +3,7 @@ package us.newberg.revolution;
 import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-<<<<<<< HEAD
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.LegacyModule;
-=======
->>>>>>> sdk
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * revolution-2015-16
@@ -15,33 +11,20 @@ import com.qualcomm.robotcore.hardware.LegacyModule;
  */
 public class TestOpMode extends OpMode
 {
-<<<<<<< HEAD
-    LegacyModule legacyModule;
-    DcMotorController motorController;
-=======
->>>>>>> sdk
-    DcMotor motor;
+    private DcMotor motor;
 
     @Override
     public void init()
     {
-        motor = hardwareMap.dcMotor.get("mot");
-
-        DbgLog.msg("Init!");
-
-        legacyModule = hardwareMap.legacyModule.get("leg");
-        motorController = hardwareMap.dcMotorController.get("con");
         motor = hardwareMap.dcMotor.get("mot");
     }
 
     @Override
     public void loop()
     {
-        motor.setPower(1);
-<<<<<<< HEAD
-=======
+        float leftY = gamepad1.left_stick_y;
+        Range.clip(leftY, -1.0f, 1.0f);
 
-        DbgLog.msg("Loop!");
->>>>>>> sdk
+        motor.setPower(leftY);
     }
 }

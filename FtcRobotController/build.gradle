@@ -44,11 +44,9 @@ dependencies {
     compile (name:'FtcCommon-release', ext:'aar')
     compile (name:'ModernRobotics-release', ext:'aar')
     compile (name:'Analytics-release', ext:'aar')
-<<<<<<< HEAD
     
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.6'
-=======
+
     compile (name:'WirelessP2p-release', ext:'aar')
->>>>>>> sdk
 }
