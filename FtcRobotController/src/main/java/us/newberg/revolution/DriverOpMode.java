@@ -45,6 +45,7 @@ public class DriverOpMode extends OpMode
         _frontRightMotor.setPower(rightPower);
         _backRightMotor.setPower(rightPower);
 
+        // Not sure how to access this data yet, but it could be really cool.
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
     }
