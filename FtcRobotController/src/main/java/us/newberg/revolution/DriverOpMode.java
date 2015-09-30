@@ -58,8 +58,8 @@ public class DriverOpMode extends OpMode
 
         int index = Util.RoundReal(value * (scaleArray.length - 1));
 
-        if (index > 16)
-            index = 16;
+        if (index > scaleArray.length - 1)
+            index = scaleArray.length - 1;
 
         boolean negative = value <= 0;
 
