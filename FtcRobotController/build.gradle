@@ -39,14 +39,13 @@ allprojects {
 
 dependencies {
     compile files('libs/android-support-v4.jar')
-    compile (name:'RobotCore-release', ext:'aar')
-    compile (name:'Hardware-release', ext:'aar')
-    compile (name:'FtcCommon-release', ext:'aar')
-    compile (name:'ModernRobotics-release', ext:'aar')
-    compile (name:'Analytics-release', ext:'aar')
-    
-    compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.6'
-
-    compile (name:'WirelessP2p-release', ext:'aar')
+    compile(name: 'RobotCore-release', ext: 'aar')
+    compile(name: 'Hardware-release', ext: 'aar')
+    compile(name: 'FtcCommon-release', ext: 'aar')
+    compile(name: 'ModernRobotics-release', ext: 'aar')
+    compile(name: 'Analytics-release', ext: 'aar')
+    compile(name: 'WirelessP2p-release', ext: 'aar')
+    compile 'com.google.guava:guava:18.0'
+    compile 'org.projectlombok:lombok:1.16.6'
+    compile name: 'PeacockCommon-0.0.1'
 }

@@ -34,6 +34,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
+import us.newberg.revolution.DriverOpMode;
 import us.newberg.revolution.TestOpMode;
 
 /**
@@ -57,7 +58,11 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
 
-    manager.register("TestOp1", TestOpMode.class);
+    // Register the TestOpMode
+    manager.register("TestOp", TestOpMode.class);
+
+    // Register the driver controlled OpMode
+    manager.register("Driver Controlled", DriverOpMode.class);
 
     manager.register("NullOp", NullOp.class);
 
