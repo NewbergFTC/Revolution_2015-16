@@ -22,6 +22,19 @@ public class Util
     }
 
     /**
+     * Clamps a value to a range
+     *
+     * @param a     The value to clamp
+     * @param min   Min
+     * @param max   Max
+     * @return      Clamped value
+     */
+    public static double Clampd(double a, double min, double max)
+    {
+        return Math.max(min, Math.min(max, a));
+    }
+
+    /**
      * Round a float to an int with a bit more precision
      *
      * @param a The value to round

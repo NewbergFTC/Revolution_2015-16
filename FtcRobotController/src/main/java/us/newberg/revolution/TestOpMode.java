@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * revolution-2015-16
- * Created by Garrison Peacock on 9/21/15.
+ * Revolution 2015-2016
+ * FTC team 9474
  */
 public class TestOpMode extends OpMode
 {
