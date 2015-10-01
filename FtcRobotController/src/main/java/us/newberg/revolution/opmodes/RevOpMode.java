@@ -75,13 +75,10 @@ public abstract class RevOpMode extends OpMode
 
     final public void Drive(float leftPower, float rightPower)
     {
-        float leftPwr = Util.Clampf(leftPower, -1.0f, 1.0f);
-        float rightPwr = Util.Clampf(rightPower, -1.0f, 1.0f);
-
-        SetFrontLeftSpeed(leftPwr);
+        SetFrontLeftSpeed(leftPower);
         SetBackLeftSpeed(leftPower);
-        SetFrontRightSpeed(rightPwr);
-        SetBackRightSpeed(rightPwr);
+        SetFrontRightSpeed(rightPower);
+        SetBackRightSpeed(rightPower);
     }
 
     // TODO(Peacock): Test this
@@ -89,53 +86,54 @@ public abstract class RevOpMode extends OpMode
     {
         Drive(leftPower, rightPower);
         new Thread(new DriveTimer(this, millis)).start();
+        // Just in case
         Drive(0, 0);
     }
 
-    final public void SetFrontLeftSpeed(double speed)
+    synchronized public void SetFrontLeftSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _frontLeftSpeed.set(spd);
     }
 
-    final public void SetFrontRightSpeed(double speed)
+    synchronized public void SetFrontRightSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _frontRightSpeed.set(spd);
     }
 
-    final public void SetBackLeftSpeed(double speed)
+    synchronized public void SetBackLeftSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _backLeftSpeed.set(spd);
     }
 
-    final public void SetBackRightSpeed(double speed)
+    synchronized public void SetBackRightSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _backRightSpeed.set(spd);
     }
 
-    final public double GetFrontLeftSpeed()
+    synchronized public double GetFrontLeftSpeed()
     {
         return _frontLeftSpeed.get();
     }
 
-    final public double GetFrontRightSpeed()
+    synchronized public double GetFrontRightSpeed()
     {
         return _frontRightSpeed.get();
     }
 
-    final public double GetBackLeftSpeed()
+    synchronized public double GetBackLeftSpeed()
     {
         return _backLeftSpeed.get();
     }
 
-    final public double GetBackRightSpeed()
+    synchronized public double GetBackRightSpeed()
     {
         return _backRightSpeed.get();
     }

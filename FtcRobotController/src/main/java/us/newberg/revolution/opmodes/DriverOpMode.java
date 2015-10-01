@@ -1,6 +1,7 @@
 package us.newberg.revolution.opmodes;
 
 import com.peacock.common.math.Util;
+import com.qualcomm.ftccommon.DbgLog;
 
 /**
  * Revolution 2015-2016
@@ -24,6 +25,9 @@ public class DriverOpMode extends RevOpMode
         float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
         float rightYOne = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f);
         float rightXOne = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
+
+        DbgLog.msg("LeftYOne " + String.valueOf(leftYOne));
+        DbgLog.msg("RightYOne " + String.valueOf(rightYOne));
 
         // Calculate tank drive speed for each side
         float leftPower = Scale(leftYOne);
