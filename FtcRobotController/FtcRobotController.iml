@@ -98,11 +98,11 @@
     <orderEntry type="library" exported="" name="ModernRobotics-release-" level="project" />
     <orderEntry type="library" exported="" name="Analytics-release-" level="project" />
     <orderEntry type="library" exported="" name="FtcCommon-release-" level="project" />
+    <orderEntry type="library" exported="" name="PeacockCommon-1.0" level="project" />
     <orderEntry type="library" exported="" name="WirelessP2p-release-" level="project" />
     <orderEntry type="library" exported="" name="lombok-1.16.6" level="project" />
     <orderEntry type="library" exported="" name="Hardware-release-" level="project" />
     <orderEntry type="library" exported="" name="RobotCore-release-" level="project" />
-    <orderEntry type="library" exported="" name="PeacockCommon-0.0.1" level="project" />
     <orderEntry type="library" exported="" name="guava-18.0" level="project" />
   </component>
 </module>

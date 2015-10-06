@@ -9,10 +9,12 @@ import com.qualcomm.ftccommon.DbgLog;
  */
 public class DriverOpMode extends RevOpMode
 {
+    private boolean _tmp;
+
     @Override
     public void Initialize()
     {
-
+        _tmp = false;
     }
 
     @Override
@@ -26,17 +28,19 @@ public class DriverOpMode extends RevOpMode
         float rightYOne = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f);
         float rightXOne = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
 
-        DbgLog.msg("LeftYOne " + String.valueOf(leftYOne));
-        DbgLog.msg("RightYOne " + String.valueOf(rightYOne));
-
         // Calculate tank drive speed for each side
-        float leftPower = Scale(leftYOne);
-        float rightPower = Scale(rightYOne);
+        float leftPower = 1.0f;//Scale(leftYOne);
+        float rightPower = 1.0f;Scale(rightYOne);
 
-        // Set the motor speed
-        Drive(leftPower, rightPower);
+      //  Drive(leftPower, rightPower);
 
-        // Not sure how to access this data yet, but it could be really cool.
+        if (!_tmp)
+        {
+            TimedDrive(-1.0f, 1.0f, 30000);
+            _tmp = true;
+        }
+
+        telemetry.addData("leftY", String.format("%.3f", leftYOne));
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
     }

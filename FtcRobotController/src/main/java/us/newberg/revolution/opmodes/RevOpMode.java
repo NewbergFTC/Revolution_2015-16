@@ -85,9 +85,11 @@ public abstract class RevOpMode extends OpMode
     final public void TimedDrive(float leftPower, float rightPower, long millis)
     {
         Drive(leftPower, rightPower);
-        new Thread(new DriveTimer(this, millis)).start();
-        // Just in case
-        Drive(0, 0);
+
+        DriveTimer timer = new DriveTimer(this, millis);
+        Thread thread = new Thread(timer);
+
+        thread.start();
     }
 
     synchronized public void SetFrontLeftSpeed(double speed)
