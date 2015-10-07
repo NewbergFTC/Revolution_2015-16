@@ -1,4 +1,5 @@
 com.peacock.common
+com.peacock.common.concurrent
 com.peacock.common.math
 com.peacock.common.string
 com.peacock.common.video
