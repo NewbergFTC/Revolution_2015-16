@@ -1,13 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion = 'Google Inc.:Google APIs:19'
-    buildToolsVersion = '21.1.2'
-
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 19
     }
+    compileSdkVersion 'Google Inc.:Google APIs:19'
+    buildToolsVersion '21.1.2'
 }
 
 buildscript {
@@ -45,9 +44,4 @@ dependencies {
     compile(name: 'ModernRobotics-release', ext: 'aar')
     compile(name: 'Analytics-release', ext: 'aar')
     compile(name: 'WirelessP2p-release', ext: 'aar')
-
-    compile 'com.google.guava:guava:18.0'
-    compile 'org.projectlombok:lombok:1.16.6'
-
-    compile name: 'PeacockCommon-1.0'
 }
