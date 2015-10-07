@@ -9,12 +9,10 @@ import com.qualcomm.ftccommon.DbgLog;
  */
 public class DriverOpMode extends RevOpMode
 {
-    private boolean _tmp;
-
     @Override
     public void Initialize()
     {
-        _tmp = false;
+
     }
 
     @Override
@@ -22,6 +20,7 @@ public class DriverOpMode extends RevOpMode
     {
         // TODO(Peacock): Talk with drivers about desired controls
 
+        // TODO(Peacock): Find out why gamepad isn't working
         // Get and scale the joystick values
         float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
         float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
@@ -29,18 +28,11 @@ public class DriverOpMode extends RevOpMode
         float rightXOne = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
 
         // Calculate tank drive speed for each side
-        float leftPower = 1.0f;//Scale(leftYOne);
-        float rightPower = 1.0f;Scale(rightYOne);
+        float leftPower = Scale(leftYOne);
+        float rightPower = Scale(rightYOne);
 
-      //  Drive(leftPower, rightPower);
+        Drive(leftPower, rightPower);
 
-        if (!_tmp)
-        {
-            TimedDrive(-1.0f, 1.0f, 30000);
-            _tmp = true;
-        }
-
-        telemetry.addData("leftY", String.format("%.3f", leftYOne));
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
     }

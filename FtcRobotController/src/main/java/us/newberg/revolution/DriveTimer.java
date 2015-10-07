@@ -8,7 +8,6 @@ import us.newberg.revolution.opmodes.RevOpMode;
  * Revolution 2015-2016
  * FTC team 9474
  */
-// TODO(Peacock): Test this
 public class DriveTimer implements Runnable
 {
     final private RevOpMode _target;
@@ -23,6 +22,9 @@ public class DriveTimer implements Runnable
     @Override
     public void run()
     {
+        if (_target == null)
+            return;
+
         try
         {
             Thread.sleep(_millis);

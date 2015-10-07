@@ -34,7 +34,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
 
-import us.newberg.revolution.TestOpMode;
+import us.newberg.revolution.opmodes.TestOpMode;
 import us.newberg.revolution.opmodes.AutoBlueOpMode;
 import us.newberg.revolution.opmodes.AutoRedOpMode;
 import us.newberg.revolution.opmodes.DriverOpMode;
@@ -62,6 +62,7 @@ public class FtcOpModeRegister implements OpModeRegister {
 
       manager.register("TestOp", TestOpMode.class);
       manager.register("Driver Controlled", DriverOpMode.class);
+
       // TODO: Name autonomous opModes based on their function
       manager.register("Red team autonomous", AutoRedOpMode.class);
       manager.register("Blue team autonomous", AutoBlueOpMode.class);

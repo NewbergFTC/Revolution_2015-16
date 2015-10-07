@@ -81,15 +81,11 @@ public abstract class RevOpMode extends OpMode
         SetBackRightSpeed(rightPower);
     }
 
-    // TODO(Peacock): Test this
     final public void TimedDrive(float leftPower, float rightPower, long millis)
     {
         Drive(leftPower, rightPower);
 
-        DriveTimer timer = new DriveTimer(this, millis);
-        Thread thread = new Thread(timer);
-
-        thread.start();
+        new Thread(new DriveTimer(this, millis));
     }
 
     synchronized public void SetFrontLeftSpeed(double speed)
