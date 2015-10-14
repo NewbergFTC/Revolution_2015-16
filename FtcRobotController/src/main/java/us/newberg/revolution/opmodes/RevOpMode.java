@@ -35,15 +35,16 @@ public abstract class RevOpMode extends OpMode
         _backRightSpeed = new AtomicDouble();
     }
 
-    // Force children to call these instead of calling super
+    // Force subclasses to call these instead of calling init or loop
     public abstract void Initialize();
     public abstract void Update();
 
     @Override
     final public void init()
     {
-        // Init the drive motors
         // TODO(Peacock): Figure out how to upload a robot config to the phone
+
+        // Init the drive motors
         _frontLeftMotor = hardwareMap.dcMotor.get("frontLeft");
         _frontRightMotor = hardwareMap.dcMotor.get("frontRight");
         _backLeftMotor = hardwareMap.dcMotor.get("backLeft");
@@ -54,15 +55,14 @@ public abstract class RevOpMode extends OpMode
         SetFrontRightSpeed(0);
         SetBackRightSpeed(0);
 
-        // Call child init
+        // Call subclass init
         Initialize();
     }
 
     @Override
     final public void loop()
     {
-        // Should this be before or after we set the motor speed?
-        // Call child loop
+        // Call subclass loop
         Update();
 
         _frontLeftMotor.setPower(GetFrontLeftSpeed());
