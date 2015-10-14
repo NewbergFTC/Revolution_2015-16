@@ -4,7 +4,7 @@ package us.newberg.revolution.opmodes;
  * Revolution 2015-2016
  * FTC team 9474
  */
-// TODO(Peacock): Plan opMode
+// TODO(Peacock): Plan at least two autonomous modes, one for each color team
 public class AutoRedOpMode extends RevOpMode
 {
     @Override

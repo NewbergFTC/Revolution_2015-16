@@ -11,8 +11,6 @@ import us.newberg.revolution.DriveTimer;
  * Revolution 2015-2016
  * FTC team 9474
  */
-// TODO(Peacock): Should this extend LinearOpMode?
-// That might make the whole timedDrive thing better, but we should test this first
 public abstract class RevOpMode extends OpMode
 {
     // Drive motors
@@ -63,7 +61,7 @@ public abstract class RevOpMode extends OpMode
     @Override
     final public void loop()
     {
-        // TODO(Peacock): Should this be before or after we set the motor speed?
+        // Should this be before or after we set the motor speed?
         // Call child loop
         Update();
 

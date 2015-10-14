@@ -16,8 +16,6 @@ public class AutoBlueOpMode extends RevOpMode
     @Override
     public void Update()
     {
-        // TODO(Peacock): Test this
-        // It should move forward at 1/2 speed for 2 seconds
-        TimedDrive(0.5f, 0.5f, 2000);
+
     }
 }
