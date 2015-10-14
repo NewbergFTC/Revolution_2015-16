@@ -75,8 +75,8 @@ public abstract class RevOpMode extends OpMode
 
     final public void Drive(float leftPower, float rightPower)
     {
-        SetFrontLeftSpeed(leftPower);
-        SetBackLeftSpeed(leftPower);
+        SetFrontLeftSpeed(-leftPower);
+        SetBackLeftSpeed(-leftPower);
         SetFrontRightSpeed(rightPower);
         SetBackRightSpeed(rightPower);
     }
@@ -85,7 +85,7 @@ public abstract class RevOpMode extends OpMode
     {
         Drive(leftPower, rightPower);
 
-        new Thread(new DriveTimer(this, millis));
+        new Thread(new DriveTimer(this, millis)).start();
     }
 
     synchronized public void SetFrontLeftSpeed(double speed)
