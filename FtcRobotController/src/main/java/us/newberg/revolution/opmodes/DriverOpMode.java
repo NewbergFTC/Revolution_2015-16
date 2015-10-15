@@ -29,7 +29,20 @@ public class DriverOpMode extends RevOpMode
 
         // Calculate tank drive speed for each side
         float leftPower = Scale(leftYOne);
-        float rightPower = Scale(rightYOne);
+        float rightPower = Scale(leftYOne);
+
+        float leftX = Scale(leftXOne);
+
+        if (leftX > 0)
+        {
+            rightPower -= rightPower > 0 ? leftX * 2 : leftX;
+            leftPower += leftPower > 0 ? leftX : leftX * 2;
+        }
+        else if (leftX < 0)
+        {
+            rightPower = rightPower > 0 ? rightPower + -leftX : -leftX;
+            leftPower = leftPower > 0 ? leftPower + leftX : leftX;
+        }
 
         Drive(leftPower, rightPower);
 
@@ -44,7 +57,7 @@ public class DriverOpMode extends RevOpMode
         float[] scaleArray = { 0.0f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f,
                                0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 0.95f, 1.00f };
 
-        int index = Util.RoundReal(value * (scaleArray.length - 1));
+        int index = Math.abs(Util.RoundReal(value * (scaleArray.length - 1)));
 
         if (index > scaleArray.length - 1)
             index = scaleArray.length - 1;
