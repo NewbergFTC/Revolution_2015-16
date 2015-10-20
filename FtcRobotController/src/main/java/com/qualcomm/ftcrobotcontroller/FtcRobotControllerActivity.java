@@ -39,7 +39,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -73,14 +72,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 
-import us.newberg.revolution.RevCamera;
-
 public class FtcRobotControllerActivity extends Activity {
-
-    // 9474
-    public static Activity activity;    // Temp workaround since this causes a memory leak
-    public static final int REQUEST_IMAGE_CAPTURE = 9;
-    // 9474
 
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
   private static final boolean USE_DEVICE_EMULATION = false;
@@ -145,10 +137,6 @@ public class FtcRobotControllerActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-      // 9474
-      activity = this;
-      // 9474
-
     setContentView(R.layout.activity_ftc_controller);
 
     utility = new Utility(this);
@@ -202,14 +190,12 @@ public class FtcRobotControllerActivity extends Activity {
 
     callback.wifiDirectUpdate(WifiDirectAssistant.Event.DISCONNECTED);
 
-    entireScreenLayout.setOnTouchListener(new View.OnTouchListener()
-    {
-        @Override
-        public boolean onTouch(View v, MotionEvent event)
-        {
-            dimmer.handleDimTimer();
-            return false;
-        }
+    entireScreenLayout.setOnTouchListener(new View.OnTouchListener() {
+      @Override
+      public boolean onTouch(View v, MotionEvent event) {
+        dimmer.handleDimTimer();
+        return false;
+      }
     });
 
   }
@@ -297,9 +283,8 @@ public class FtcRobotControllerActivity extends Activity {
   @Override
   protected void onActivityResult(int request, int result, Intent intent) {
     if (request == REQUEST_CONFIG_WIFI_CHANNEL) {
-      if (result == RESULT_OK)
-      {
-          Toast toast = Toast.makeText(context, "Configuration Complete", Toast.LENGTH_LONG);
+      if (result == RESULT_OK) {
+        Toast toast = Toast.makeText(context, "Configuration Complete", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         showToast(toast);
       }
@@ -313,14 +298,6 @@ public class FtcRobotControllerActivity extends Activity {
         }
       }
     }
-
-      // 9474
-      if (request == REQUEST_IMAGE_CAPTURE && result == RESULT_OK)
-      {
-          Bitmap imageBitmap = (Bitmap)intent.getExtras().get("data");
-          RevCamera.AddPhoto(imageBitmap);
-      }
-      // 9474
   }
 
   public void onServiceBind(FtcRobotControllerService service) {
