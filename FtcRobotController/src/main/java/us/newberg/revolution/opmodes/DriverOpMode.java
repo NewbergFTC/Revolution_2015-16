@@ -1,5 +1,7 @@
 package us.newberg.revolution.opmodes;
 
+import android.view.KeyEvent;
+
 import com.peacock.common.math.Util;
 import com.qualcomm.ftccommon.DbgLog;
 
@@ -24,8 +26,8 @@ public class DriverOpMode extends RevOpMode
         // Get and scale the joystick values
         float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
         float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
-        float rightYOne = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f);
-        float rightXOne = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
+        //float rightYOne = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f);
+        //float rightXOne = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
 
         // Calculate tank drive speed for each side
         float leftPower = Scale(leftYOne);
@@ -35,13 +37,13 @@ public class DriverOpMode extends RevOpMode
 
         if (leftX > 0)
         {
+            leftPower += leftX;
             rightPower -= rightPower > 0 ? leftX * 2 : leftX;
-            leftPower += leftPower > 0 ? leftX : leftX * 2;
         }
         else if (leftX < 0)
         {
-            rightPower = rightPower > 0 ? rightPower + -leftX : -leftX;
-            leftPower = leftPower > 0 ? leftPower + leftX : leftX;
+            leftPower += leftPower > 0 ? leftX * 2 : leftX;
+            rightPower -= leftX;
         }
 
         Drive(leftPower, rightPower);
