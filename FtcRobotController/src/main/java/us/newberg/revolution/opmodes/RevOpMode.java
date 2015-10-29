@@ -5,6 +5,8 @@ import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import java.util.Map;
+
 import us.newberg.revolution.DriveTimer;
 
 /**
@@ -25,6 +27,8 @@ public abstract class RevOpMode extends OpMode
     private AtomicDouble _backLeftSpeed;
     private AtomicDouble _backRightSpeed;
 
+    private DriveTimer _timer;
+
     public RevOpMode()
     {
         super();
@@ -33,6 +37,8 @@ public abstract class RevOpMode extends OpMode
         _frontRightSpeed = new AtomicDouble();
         _backLeftSpeed = new AtomicDouble();
         _backRightSpeed = new AtomicDouble();
+
+        _timer = null;
     }
 
     // Force subclasses to call these instead of calling init or loop
@@ -83,7 +89,17 @@ public abstract class RevOpMode extends OpMode
     {
         Drive(leftPower, rightPower);
 
-        new Thread(new DriveTimer(this, millis)).start();
+        if (_timer != null)
+            _timer.Terminate();
+
+        _timer = new DriveTimer(this, millis);
+        _timer.start();
+    }
+
+    final public void StopTimedDrive()
+    {
+        if (_timer != null)
+            _timer.Terminate();
     }
 
     synchronized public void SetFrontLeftSpeed(double speed)
