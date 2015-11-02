@@ -23,6 +23,6 @@ public class AutoRedOpMode extends RevOpMode
     @Override
     public void Update()
     {
-        
+
     }
 }

@@ -15,6 +15,10 @@ import us.newberg.revolution.DriveTimer;
  */
 public abstract class RevOpMode extends OpMode
 {
+    // TODO(Peacock): Setup encoders and find this stuff
+    public static final float CLICKS_PER_REVOLUTION = 0;
+    public static final float CLICKS_PER_FOOT = 0;
+
     // Drive motors
     private DcMotor _frontLeftMotor;
     private DcMotor _frontRightMotor;
@@ -83,6 +87,14 @@ public abstract class RevOpMode extends OpMode
         SetBackLeftSpeed(-leftPower);
         SetFrontRightSpeed(rightPower);
         SetBackRightSpeed(rightPower);
+    }
+
+    final public void AutoDrive(float power, float feet)
+    {
+        // TODO(Peacock): Test this
+
+        // TODO(Peacock): Some real wait value, based on the power and distance
+        //TimedDrive(power, power, Util.RoundReal((feet / power) * 1.1));
     }
 
     final public void TimedDrive(float leftPower, float rightPower, long millis)

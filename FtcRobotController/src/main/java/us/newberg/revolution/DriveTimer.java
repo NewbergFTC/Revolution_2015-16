@@ -18,6 +18,8 @@ public class DriveTimer extends Thread
 
     public DriveTimer(RevOpMode target, long millis)
     {
+        super();
+
         _target = target;
         _millis = millis;
         _running = new AtomicBoolean(false);

@@ -1,7 +1,5 @@
 package us.newberg.revolution.opmodes;
 
-import android.view.KeyEvent;
-
 import com.peacock.common.math.Util;
 import com.qualcomm.ftccommon.DbgLog;
 
@@ -21,7 +19,6 @@ public class DriverOpMode extends RevOpMode
     public void Update()
     {
         // TODO(Peacock): Talk with drivers about desired controls
-        // TODO(Peacock): Find out why gamepad isn't working
 
         // Get and scale the joystick values
         float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
@@ -64,7 +61,7 @@ public class DriverOpMode extends RevOpMode
         if (index > scaleArray.length - 1)
             index = scaleArray.length - 1;
 
-        boolean negative = value <= 0;
+        boolean negative = value < 0;
 
         return negative ? -scaleArray[index] : scaleArray[index];
     }
