@@ -1,4 +1,4 @@
-# Created by https://www.gitignore.io/api/android,intellij,osx
+# Created by https://www.gitignore.io/api/android,intellij,gradle,osx,linux
 
 ### Android ###
 # Built application files
@@ -84,6 +84,17 @@ crashlytics.properties
 crashlytics-build.properties
 
 
+### Gradle ###
+.gradle
+build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+
 ### OSX ###
 .DS_Store
 .AppleDouble
@@ -110,3 +121,13 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+### Linux ###
+*~
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
