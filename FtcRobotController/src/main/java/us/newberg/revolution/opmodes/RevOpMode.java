@@ -31,7 +31,7 @@ public abstract class RevOpMode extends OpMode
     private AtomicDouble _backLeftSpeed;
     private AtomicDouble _backRightSpeed;
 
-    private DriveTimer _timer;
+    protected DriveTimer _timer;
 
     public RevOpMode()
     {
@@ -81,7 +81,7 @@ public abstract class RevOpMode extends OpMode
         _backRightMotor.setPower(GetBackRightSpeed());
     }
 
-    final public void Drive(float leftPower, float rightPower)
+    public void Drive(float leftPower, float rightPower)
     {
         SetFrontLeftSpeed(-leftPower);
         SetBackLeftSpeed(-leftPower);
@@ -89,26 +89,31 @@ public abstract class RevOpMode extends OpMode
         SetBackRightSpeed(rightPower);
     }
 
-    final public void AutoDrive(float power, float feet)
+    public void AutoDrive(float power, float feet)
     {
-        // TODO(Peacock): Test this
 
-        // TODO(Peacock): Some real wait value, based on the power and distance
-        //TimedDrive(power, power, Util.RoundReal((feet / power) * 1.1));
     }
 
-    final public void TimedDrive(float leftPower, float rightPower, long millis)
+    public void TimedDrive(float leftPower, float rightPower, long millis)
     {
-        Drive(leftPower, rightPower);
-
-        if (_timer != null)
+        if (_timer == null)
+            _timer = new DriveTimer(this, millis + 100);
+        else
+        {
             _timer.Terminate();
+            _timer.SetDelay(millis + 100);
+        }
 
-        _timer = new DriveTimer(this, millis);
         _timer.start();
+        Drive(leftPower, rightPower);
     }
 
-    final public void StopTimedDrive()
+    final public void Turn(float degree, float speed)
+    {
+
+    }
+
+    public void StopTimedDrive()
     {
         if (_timer != null)
             _timer.Terminate();

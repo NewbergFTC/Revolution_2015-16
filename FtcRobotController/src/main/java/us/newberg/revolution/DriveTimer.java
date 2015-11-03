@@ -3,6 +3,7 @@ package us.newberg.revolution;
 import com.qualcomm.ftccommon.DbgLog;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import us.newberg.revolution.opmodes.RevOpMode;
 
@@ -14,14 +15,14 @@ public class DriveTimer extends Thread
 {
     final private RevOpMode _target;
     final private AtomicBoolean _running;
-    private long _millis;
+    final private AtomicLong _millis;
 
     public DriveTimer(RevOpMode target, long millis)
     {
         super();
 
         _target = target;
-        _millis = millis;
+        _millis = new AtomicLong(millis);
         _running = new AtomicBoolean(false);
     }
 
@@ -30,31 +31,38 @@ public class DriveTimer extends Thread
         _running.set(false);
     }
 
+    synchronized public void SetDelay(long millis)
+    {
+        _millis.set(millis);
+    }
+
     @Override
     public void run()
     {
         if (_target == null)
             return;
 
-        if (_millis <= 0)
+        if (_millis.get() <= 0)
             return;
 
         _running.set(true);
+
+        long sleepTime = _millis.get() / 10;
 
         while (_running.get())
         {
             try
             {
-                sleep(_millis);
+                sleep(sleepTime);
             } catch (InterruptedException e)
             {
                 e.printStackTrace();
                 DbgLog.error("DriveTimer sleep was interrupted");
             }
 
-            _millis -= _millis / 10;
+            _millis.set(_millis.get() - sleepTime);
 
-            if (_millis <= 0)
+            if (_millis.get() <= 0)
                 _running.set(false);
         }
 
