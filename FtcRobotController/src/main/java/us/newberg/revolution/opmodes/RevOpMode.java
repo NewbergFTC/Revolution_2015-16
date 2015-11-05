@@ -4,10 +4,10 @@ import com.google.common.util.concurrent.AtomicDouble;
 import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import java.util.Map;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import us.newberg.revolution.DriveTimer;
+import us.newberg.revolution.lib.Reference;
 
 /**
  * Revolution 2015-2016
@@ -15,10 +15,6 @@ import us.newberg.revolution.DriveTimer;
  */
 public abstract class RevOpMode extends OpMode
 {
-    // TODO(Peacock): Setup encoders and find this stuff
-    public static final float CLICKS_PER_REVOLUTION = 0;
-    public static final float CLICKS_PER_FOOT = 0;
-
     // Drive motors
     private DcMotor _frontLeftMotor;
     private DcMotor _frontRightMotor;
@@ -42,7 +38,7 @@ public abstract class RevOpMode extends OpMode
         _backLeftSpeed = new AtomicDouble();
         _backRightSpeed = new AtomicDouble();
 
-        _timer = null;
+        _timer = new DriveTimer(this, 0);
     }
 
     // Force subclasses to call these instead of calling init or loop
@@ -89,9 +85,45 @@ public abstract class RevOpMode extends OpMode
         SetBackRightSpeed(rightPower);
     }
 
-    public void AutoDrive(float power, float feet)
+    // TODO(Peacock): Test this
+    public void AutoDrive(float power, float inches)
     {
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
+        float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFRENCE) * inches;
+        float goal = _frontLeftMotor.getCurrentPosition() + ticks;
+        telemetry.addData("Target: ", String.valueOf(goal));
+
+        _frontLeftMotor.setTargetPosition(Util.RoundReal(goal));
+
+        _timer.Terminate();
+        _timer.SetDelay(Util.RoundReal((inches / 12) + 1));
+
+        if (_frontLeftMotor.getTargetPosition() < goal)
+        {
+            while (_frontLeftMotor.getTargetPosition() < goal)
+            {
+                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
+                _frontLeftMotor.setPower(-1.0);
+                _frontRightMotor.setPower(-1.0);
+                _backLeftMotor.setPower(1.0);
+                _backRightMotor.setPower(1.0);
+            }
+        }
+
+        if (_frontLeftMotor.getTargetPosition() > goal)
+        {
+            while (_frontLeftMotor.getTargetPosition() < goal)
+            {
+                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
+                _frontLeftMotor.setPower(1.0);
+                _frontRightMotor.setPower(1.0);
+                _backLeftMotor.setPower(-1.0);
+                _backRightMotor.setPower(-1.0);
+            }
+        }
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public void TimedDrive(float leftPower, float rightPower, long millis)
@@ -108,9 +140,45 @@ public abstract class RevOpMode extends OpMode
         Drive(leftPower, rightPower);
     }
 
+    // TODO(Peacock): Test this
     final public void Turn(float degree, float speed)
     {
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
+        float goal = _frontLeftMotor.getCurrentPosition() + degree;
+        telemetry.addData("Target: ", String.valueOf(goal));
+
+        _frontLeftMotor.setTargetPosition(Util.RoundReal(goal));
+
+        _timer.Terminate();
+        // TODO(Peacock): Real value here
+        _timer.SetDelay(20);
+
+        if (_frontLeftMotor.getTargetPosition() < goal)
+        {
+            while (_frontLeftMotor.getTargetPosition() < goal)
+            {
+                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
+                _frontLeftMotor.setPower(1.0);
+                _frontRightMotor.setPower(1.0);
+                _backLeftMotor.setPower(1.0);
+                _backRightMotor.setPower(1.0);
+            }
+        }
+
+        if (_frontLeftMotor.getTargetPosition() > goal)
+        {
+            while (_frontLeftMotor.getTargetPosition() < goal)
+            {
+                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
+                _frontLeftMotor.setPower(-1.0);
+                _frontRightMotor.setPower(-1.0);
+                _backLeftMotor.setPower(1.0);
+                _backRightMotor.setPower(1.0);
+            }
+        }
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public void StopTimedDrive()

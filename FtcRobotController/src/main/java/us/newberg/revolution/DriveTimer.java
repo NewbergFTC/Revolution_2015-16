@@ -36,6 +36,8 @@ public class DriveTimer extends Thread
         _millis.set(millis);
     }
 
+    synchronized public boolean GetRunning() { return _running.get(); }
+
     @Override
     public void run()
     {

@@ -34,7 +34,7 @@ public class AutoBlueOpMode extends RevOpMode
                 if (!_running)
                 {
                     _timer.SetDelay(6000);  // Six seconds should be enough
-                    AutoDrive(0.75f, 5);    // Drive forward at 75% power for five feet
+                    AutoDrive(0.75f, 2 * 12);    // Drive forward at 75% power for five feet
 
                     _running = true;
                 }
