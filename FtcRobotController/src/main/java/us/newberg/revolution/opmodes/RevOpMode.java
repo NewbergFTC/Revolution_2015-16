@@ -1,8 +1,7 @@
 package us.newberg.revolution.opmodes;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import com.peacock.common.math.Util;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
@@ -13,7 +12,7 @@ import us.newberg.revolution.lib.Reference;
  * Revolution 2015-2016
  * FTC team 9474
  */
-public abstract class RevOpMode extends OpMode
+public abstract class RevOpMode extends LinearOpMode
 {
     // Drive motors
     private DcMotor _frontLeftMotor;
@@ -21,60 +20,58 @@ public abstract class RevOpMode extends OpMode
     private DcMotor _backLeftMotor;
     private DcMotor _backRightMotor;
 
-    // Atomic variables so we don't run into data races when doing timed autonomous stuff
-    private AtomicDouble _frontLeftSpeed;
-    private AtomicDouble _frontRightSpeed;
-    private AtomicDouble _backLeftSpeed;
-    private AtomicDouble _backRightSpeed;
-
+//    // Atomic variables so we don't run into data races when doing timed autonomous stuff
+//    private AtomicDouble _frontLeftSpeed;
+//    private AtomicDouble _frontRightSpeed;
+//    private AtomicDouble _backLeftSpeed;
+//    private AtomicDouble _backRightSpeed;
+//
     protected DriveTimer _timer;
 
     public RevOpMode()
     {
         super();
 
-        _frontLeftSpeed = new AtomicDouble();
-        _frontRightSpeed = new AtomicDouble();
-        _backLeftSpeed = new AtomicDouble();
-        _backRightSpeed = new AtomicDouble();
+//        _frontLeftSpeed = new AtomicDouble();
+//        _frontRightSpeed = new AtomicDouble();
+//        _backLeftSpeed = new AtomicDouble();
+//        _backRightSpeed = new AtomicDouble();
 
         _timer = new DriveTimer(this, 0);
     }
 
-    // Force subclasses to call these instead of calling init or loop
+    @Override
+    public void runOpMode() throws InterruptedException
+    {
+        Init();
+
+        // Call subclass init
+        Initialize();
+
+        waitForStart();
+
+        while (opModeIsActive())
+        {
+            Update();
+
+//            _frontLeftMotor.setPower(GetFrontLeftSpeed());
+//            _frontRightMotor.setPower(GetFrontRightSpeed());
+//            _backLeftMotor.setPower(GetBackLeftSpeed());
+//            _backRightMotor.setPower(GetBackRightSpeed());
+        }
+    }
+
     public abstract void Initialize();
     public abstract void Update();
 
-    @Override
-    final public void init()
+    protected void Init()
     {
-        // TODO(Peacock): Figure out how to upload a robot config to the phone
-
-        // Init the drive motors
         _frontLeftMotor = hardwareMap.dcMotor.get("frontLeft");
         _frontRightMotor = hardwareMap.dcMotor.get("frontRight");
         _backLeftMotor = hardwareMap.dcMotor.get("backLeft");
         _backRightMotor = hardwareMap.dcMotor.get("backRight");
 
-        SetFrontLeftSpeed(0);
-        SetBackLeftSpeed(0);
-        SetFrontRightSpeed(0);
-        SetBackRightSpeed(0);
-
-        // Call subclass init
-        Initialize();
-    }
-
-    @Override
-    final public void loop()
-    {
-        // Call subclass loop
-        Update();
-
-        _frontLeftMotor.setPower(GetFrontLeftSpeed());
-        _frontRightMotor.setPower(GetFrontRightSpeed());
-        _backLeftMotor.setPower(GetBackLeftSpeed());
-        _backRightMotor.setPower(GetBackRightSpeed());
+        SetDriveSpeed(0);
     }
 
     public void Drive(float leftPower, float rightPower)
@@ -90,6 +87,8 @@ public abstract class RevOpMode extends OpMode
     {
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
+        SetDriveSpeed(0);
+
         float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFRENCE) * inches;
         float goal = _frontLeftMotor.getCurrentPosition() + ticks;
         telemetry.addData("Target: ", String.valueOf(goal));
@@ -99,15 +98,18 @@ public abstract class RevOpMode extends OpMode
         _timer.Terminate();
         _timer.SetDelay(Util.RoundReal((inches / 12) + 1));
 
+        _timer.start();
+
         if (_frontLeftMotor.getTargetPosition() < goal)
         {
             while (_frontLeftMotor.getTargetPosition() < goal)
             {
                 telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-                _frontLeftMotor.setPower(-1.0);
-                _frontRightMotor.setPower(-1.0);
-                _backLeftMotor.setPower(1.0);
-                _backRightMotor.setPower(1.0);
+
+                SetFrontLeftSpeed(-power);
+                SetFrontRightSpeed(power);
+                SetBackLeftSpeed(-power);
+                SetBackRightSpeed(power);
             }
         }
 
@@ -116,12 +118,24 @@ public abstract class RevOpMode extends OpMode
             while (_frontLeftMotor.getTargetPosition() < goal)
             {
                 telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-                _frontLeftMotor.setPower(1.0);
-                _frontRightMotor.setPower(1.0);
-                _backLeftMotor.setPower(-1.0);
-                _backRightMotor.setPower(-1.0);
+
+                SetFrontLeftSpeed(power);
+                SetFrontRightSpeed(-power);
+                SetBackLeftSpeed(power);
+                SetBackRightSpeed(-power);
             }
         }
+
+        _timer.Terminate();
+        try
+        {
+            _timer.join();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        SetDriveSpeed(0);
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
@@ -138,11 +152,21 @@ public abstract class RevOpMode extends OpMode
 
         _timer.start();
         Drive(leftPower, rightPower);
+
+        try
+        {
+            _timer.join();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // TODO(Peacock): Test this
     final public void Turn(float degree, float speed)
     {
+        SetDriveSpeed(0);
+
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         float goal = _frontLeftMotor.getCurrentPosition() + degree;
@@ -152,17 +176,15 @@ public abstract class RevOpMode extends OpMode
 
         _timer.Terminate();
         // TODO(Peacock): Real value here
-        _timer.SetDelay(20);
+        _timer.SetDelay(15);
 
         if (_frontLeftMotor.getTargetPosition() < goal)
         {
             while (_frontLeftMotor.getTargetPosition() < goal)
             {
                 telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-                _frontLeftMotor.setPower(1.0);
-                _frontRightMotor.setPower(1.0);
-                _backLeftMotor.setPower(1.0);
-                _backRightMotor.setPower(1.0);
+
+                SetDriveSpeed(speed);
             }
         }
 
@@ -171,67 +193,61 @@ public abstract class RevOpMode extends OpMode
             while (_frontLeftMotor.getTargetPosition() < goal)
             {
                 telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-                _frontLeftMotor.setPower(-1.0);
-                _frontRightMotor.setPower(-1.0);
-                _backLeftMotor.setPower(1.0);
-                _backRightMotor.setPower(1.0);
+
+                SetFrontLeftSpeed(-speed);
+                SetFrontRightSpeed(speed);
+                SetBackLeftSpeed(-speed);
+                SetBackRightSpeed(speed);
             }
         }
+
+        _timer.Terminate();
+        try
+        {
+            _timer.join();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        SetDriveSpeed(0);
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
-    public void StopTimedDrive()
+    public void SetDriveSpeed(double speed)
     {
-        if (_timer != null)
-            _timer.Terminate();
+        SetFrontLeftSpeed(speed);
+        SetFrontRightSpeed(speed);
+        SetBackLeftSpeed(speed);
+        SetBackRightSpeed(speed);
     }
 
     synchronized public void SetFrontLeftSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
-        _frontLeftSpeed.set(spd);
+        _frontLeftMotor.setPower(spd);
     }
 
     synchronized public void SetFrontRightSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
-        _frontRightSpeed.set(spd);
+        _frontRightMotor.setPower(spd);
     }
 
     synchronized public void SetBackLeftSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
-        _backLeftSpeed.set(spd);
+        _backLeftMotor.setPower(spd);
     }
 
     synchronized public void SetBackRightSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
-        _backRightSpeed.set(spd);
-    }
-
-    synchronized public double GetFrontLeftSpeed()
-    {
-        return _frontLeftSpeed.get();
-    }
-
-    synchronized public double GetFrontRightSpeed()
-    {
-        return _frontRightSpeed.get();
-    }
-
-    synchronized public double GetBackLeftSpeed()
-    {
-        return _backLeftSpeed.get();
-    }
-
-    synchronized public double GetBackRightSpeed()
-    {
-        return _backRightSpeed.get();
+        _backRightMotor.setPower(spd);
     }
 }
