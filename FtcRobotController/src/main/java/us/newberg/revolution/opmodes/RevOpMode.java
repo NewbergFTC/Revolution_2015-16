@@ -4,6 +4,7 @@ import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import us.newberg.revolution.DriveTimer;
 import us.newberg.revolution.lib.Reference;
@@ -20,22 +21,14 @@ public abstract class RevOpMode extends LinearOpMode
     private DcMotor _backLeftMotor;
     private DcMotor _backRightMotor;
 
-//    // Atomic variables so we don't run into data races when doing timed autonomous stuff
-//    private AtomicDouble _frontLeftSpeed;
-//    private AtomicDouble _frontRightSpeed;
-//    private AtomicDouble _backLeftSpeed;
-//    private AtomicDouble _backRightSpeed;
-//
+    private Servo _leftStick;
+    private Servo _rightStick;
+
     protected DriveTimer _timer;
 
     public RevOpMode()
     {
         super();
-
-//        _frontLeftSpeed = new AtomicDouble();
-//        _frontRightSpeed = new AtomicDouble();
-//        _backLeftSpeed = new AtomicDouble();
-//        _backRightSpeed = new AtomicDouble();
 
         _timer = new DriveTimer(this, 0);
     }
@@ -54,22 +47,21 @@ public abstract class RevOpMode extends LinearOpMode
         {
             Update();
 
-//            _frontLeftMotor.setPower(GetFrontLeftSpeed());
-//            _frontRightMotor.setPower(GetFrontRightSpeed());
-//            _backLeftMotor.setPower(GetBackLeftSpeed());
-//            _backRightMotor.setPower(GetBackRightSpeed());
         }
     }
 
     public abstract void Initialize();
     public abstract void Update();
 
-    protected void Init()
+    protected final void Init()
     {
         _frontLeftMotor = hardwareMap.dcMotor.get("frontLeft");
         _frontRightMotor = hardwareMap.dcMotor.get("frontRight");
         _backLeftMotor = hardwareMap.dcMotor.get("backLeft");
         _backRightMotor = hardwareMap.dcMotor.get("backRight");
+
+        _leftStick = hardwareMap.servo.get("leftStick");
+        _rightStick = hardwareMap.servo.get("rightStick");
 
         SetDriveSpeed(0);
     }
@@ -163,7 +155,7 @@ public abstract class RevOpMode extends LinearOpMode
     }
 
     // TODO(Peacock): Test this
-    final public void Turn(float degree, float speed)
+    public void Turn(float degree, float speed)
     {
         SetDriveSpeed(0);
 
@@ -223,28 +215,28 @@ public abstract class RevOpMode extends LinearOpMode
         SetBackRightSpeed(speed);
     }
 
-    synchronized public void SetFrontLeftSpeed(double speed)
+    public void SetFrontLeftSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _frontLeftMotor.setPower(spd);
     }
 
-    synchronized public void SetFrontRightSpeed(double speed)
+    public void SetFrontRightSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _frontRightMotor.setPower(spd);
     }
 
-    synchronized public void SetBackLeftSpeed(double speed)
+    public void SetBackLeftSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
         _backLeftMotor.setPower(spd);
     }
 
-    synchronized public void SetBackRightSpeed(double speed)
+    public void SetBackRightSpeed(double speed)
     {
         double spd = Util.Clampd(speed, -1.0, 1.0);
 
