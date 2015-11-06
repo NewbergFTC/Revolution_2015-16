@@ -14,11 +14,8 @@ public class AutoRedOpMode extends RevOpMode
 
         waitForStart();
 
-        while (opModeIsActive())
-        {
-            AutoDrive(0.5f, 24);
-            break;
-        }
+        TimedDrive(1.0f, 1.0f, 500);
+        waitOneFullHardwareCycle();
     }
 
     @Override

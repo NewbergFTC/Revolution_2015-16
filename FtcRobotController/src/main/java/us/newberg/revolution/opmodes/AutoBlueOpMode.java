@@ -16,11 +16,10 @@ public class AutoBlueOpMode extends RevOpMode
 
         waitForStart();
 
-        while (opModeIsActive())
-        {
-
-        }
+        TimedDrive(1.0f, 1.0f, 500);
+        waitOneFullHardwareCycle();
     }
+
 
     @Override
     public void Initialize() {}

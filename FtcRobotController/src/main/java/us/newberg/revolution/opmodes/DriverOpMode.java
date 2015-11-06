@@ -44,7 +44,7 @@ public class DriverOpMode extends RevOpMode
         }
 
         Drive(leftPower, rightPower);
-
+        
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
     }

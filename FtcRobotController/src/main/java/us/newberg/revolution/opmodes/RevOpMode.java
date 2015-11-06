@@ -74,9 +74,6 @@ public abstract class RevOpMode extends LinearOpMode
         //_leftStick = hardwareMap.servo.get("leftStick");
         //_rightStick = hardwareMap.servo.get("rightStick");
 
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_WRITE);
-
         SetDriveSpeed(0);
     }
 
@@ -88,9 +85,9 @@ public abstract class RevOpMode extends LinearOpMode
         SetBackRightSpeed(rightPower);
     }
 
-    // TODO(Peacock): Test this
     public void AutoDrive(float power, float inches)
     {
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
 
         SetDriveSpeed(0);
@@ -144,6 +141,7 @@ public abstract class RevOpMode extends LinearOpMode
         SetDriveSpeed(0);
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
     }
 
     public void TimedDrive(float leftPower, float rightPower, long millis)
