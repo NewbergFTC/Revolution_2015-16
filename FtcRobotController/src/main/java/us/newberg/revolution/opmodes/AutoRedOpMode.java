@@ -16,7 +16,8 @@ public class AutoRedOpMode extends RevOpMode
 
         while (opModeIsActive())
         {
-
+            AutoDrive(0.5f, 24);
+            break;
         }
     }
 

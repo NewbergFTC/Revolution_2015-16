@@ -21,6 +21,10 @@ public abstract class RevOpMode extends LinearOpMode
     private DcMotor _backLeftMotor;
     private DcMotor _backRightMotor;
 
+    private DcMotorController _frontController;
+    private DcMotorController _backController;
+
+    // Zip-line stick things
     private Servo _leftStick;
     private Servo _rightStick;
 
@@ -47,6 +51,10 @@ public abstract class RevOpMode extends LinearOpMode
         {
             Update();
 
+            _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+            telemetry.addData("Encoder", String.valueOf(_frontLeftMotor.getCurrentPosition()));
+
+            waitForNextHardwareCycle();
         }
     }
 
@@ -60,8 +68,14 @@ public abstract class RevOpMode extends LinearOpMode
         _backLeftMotor = hardwareMap.dcMotor.get("backLeft");
         _backRightMotor = hardwareMap.dcMotor.get("backRight");
 
-        _leftStick = hardwareMap.servo.get("leftStick");
-        _rightStick = hardwareMap.servo.get("rightStick");
+        _frontController = hardwareMap.dcMotorController.get("frontCon");
+        _backController = hardwareMap.dcMotorController.get("backCon");
+
+        //_leftStick = hardwareMap.servo.get("leftStick");
+        //_rightStick = hardwareMap.servo.get("rightStick");
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_WRITE);
 
         SetDriveSpeed(0);
     }
@@ -81,7 +95,7 @@ public abstract class RevOpMode extends LinearOpMode
 
         SetDriveSpeed(0);
 
-        float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFRENCE) * inches;
+        float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
         float goal = _frontLeftMotor.getCurrentPosition() + ticks;
         telemetry.addData("Target: ", String.valueOf(goal));
 
@@ -205,6 +219,16 @@ public abstract class RevOpMode extends LinearOpMode
         SetDriveSpeed(0);
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+    }
+
+    public void SetLeftStick(double position)
+    {
+        _leftStick.setPosition(position);
+    }
+
+    public void SetRightStick(double position)
+    {
+        _rightStick.setPosition(position);
     }
 
     public void SetDriveSpeed(double speed)
