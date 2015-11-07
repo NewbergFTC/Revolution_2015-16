@@ -28,7 +28,9 @@ public class AutoBlueOpMode extends RevOpMode
         waitOneFullHardwareCycle();
         TimedDrive(-1.0f, -1.0f, 1000);
         waitOneFullHardwareCycle();
-        TimedDrive(0.5f, 0.5f, 2500);
+        TimedDrive(0.0f, 0.0f, 5000);
+        waitOneFullHardwareCycle();
+        TimedDrive(0.5f, 0.5f, 1500);
         waitOneFullHardwareCycle();
     }
 
