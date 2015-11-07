@@ -51,9 +51,6 @@ public abstract class RevOpMode extends LinearOpMode
         {
             Update();
 
-            _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-            telemetry.addData("Encoder", String.valueOf(_frontLeftMotor.getCurrentPosition()));
-
             waitForNextHardwareCycle();
         }
     }
@@ -146,13 +143,10 @@ public abstract class RevOpMode extends LinearOpMode
 
     public void TimedDrive(float leftPower, float rightPower, long millis)
     {
-        if (_timer == null)
-            _timer = new DriveTimer(this, millis + 100);
-        else
-        {
+        if (_timer != null)
             _timer.Terminate();
-            _timer.SetDelay(millis + 100);
-        }
+
+        _timer = new DriveTimer(this, millis);
 
         _timer.start();
         Drive(leftPower, rightPower);
