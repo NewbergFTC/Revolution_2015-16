@@ -25,11 +25,9 @@ public class TestOpMode extends RevOpMode
         waitOneFullHardwareCycle();
         waitOneFullHardwareCycle();
 
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitOneFullHardwareCycle();
         waitOneFullHardwareCycle();
-
-        _frontLeftMotor.setTargetPosition(2000);
 
         while (opModeIsActive())
         {
@@ -46,7 +44,10 @@ public class TestOpMode extends RevOpMode
             waitOneFullHardwareCycle();
             waitOneFullHardwareCycle();
 
-            Drive(-0.05f, -0.05f);
+            if (ticks <= 5000)
+                Drive(-0.2f, -0.2f);
+            else
+                Drive(0, 0);
         }
     }
 }
