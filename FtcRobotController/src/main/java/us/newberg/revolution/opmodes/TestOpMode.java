@@ -1,8 +1,6 @@
 package us.newberg.revolution.opmodes;
 
-import android.graphics.Bitmap;
-
-import us.newberg.revolution.RevCamera;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 
 /**
  * Revolution 2015-2016
@@ -10,35 +8,45 @@ import us.newberg.revolution.RevCamera;
  */
 public class TestOpMode extends RevOpMode
 {
-    private boolean _first;
+    @Override
+    public void Initialize() { }
 
     @Override
-    public void Initialize()
-    {
-        _first = true;
-    }
+    public void Update() { }
 
     @Override
-    public void Update()
+    public void runOpMode() throws InterruptedException
     {
-        if (_first)
+        super.Init();
+
+        waitForStart();
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeftMotor.setTargetPosition(2000);
+
+        while (opModeIsActive())
         {
-            // Drive forward at full speed for 10 seconds
-            TimedDrive(1.0f, 1.0f, 10000);
+            _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
 
-            _first = false;
-        }
+            int ticks = _frontLeftMotor.getCurrentPosition();
+            telemetry.addData("Ticks:", String.valueOf(ticks));
 
-        if (gamepad1.a)
-        {
-            RevCamera.TakePhoto();
+            _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
 
-            Bitmap[] photos = RevCamera.GetPhotos();
-            Bitmap bitmap = photos[photos.length - 1];
-
-            int center = bitmap.getPixel(bitmap.getWidth() / 2, bitmap.getHeight() / 2);
-
-            telemetry.addData("Center pixel", String.valueOf(center));
+            Drive(-0.05f, -0.05f);
         }
     }
 }

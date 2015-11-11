@@ -16,17 +16,17 @@ import us.newberg.revolution.lib.Reference;
 public abstract class RevOpMode extends LinearOpMode
 {
     // Drive motors
-    private DcMotor _frontLeftMotor;
-    private DcMotor _frontRightMotor;
-    private DcMotor _backLeftMotor;
-    private DcMotor _backRightMotor;
+    protected DcMotor _frontLeftMotor;
+    protected DcMotor _frontRightMotor;
+    protected DcMotor _backLeftMotor;
+    protected DcMotor _backRightMotor;
 
-    private DcMotorController _frontController;
-    private DcMotorController _backController;
+    protected DcMotorController _frontController;
+    protected DcMotorController _backController;
 
     // Zip-line stick things
-    private Servo _leftStick;
-    private Servo _rightStick;
+    protected Servo _leftStick;
+    protected Servo _rightStick;
 
     protected DriveTimer _timer;
 
