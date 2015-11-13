@@ -72,6 +72,33 @@ public abstract class RevOpMode extends LinearOpMode
         //_rightStick = hardwareMap.servo.get("rightStick");
 
         SetDriveSpeed(0);
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+    }
+
+    public int GetTicks()
+    {
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        try
+        {
+            waitOneFullHardwareCycle();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        int position = _frontLeftMotor.getCurrentPosition();
+
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        try
+        {
+            waitOneFullHardwareCycle();
+        } catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        return position;
     }
 
     public void Drive(float leftPower, float rightPower)
@@ -84,61 +111,31 @@ public abstract class RevOpMode extends LinearOpMode
 
     public void AutoDrive(float power, float inches)
     {
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
-
-        SetDriveSpeed(0);
+        float position = GetTicks();
 
         float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
-        float goal = _frontLeftMotor.getCurrentPosition() + ticks;
-        telemetry.addData("Target: ", String.valueOf(goal));
+        float target = position + ticks;
 
-        _frontLeftMotor.setTargetPosition(Util.RoundReal(goal));
+        telemetry.addData("Target Ticks", String.valueOf(target));
 
-        _timer.Terminate();
-        _timer.SetDelay(Util.RoundReal((inches / 12) + 1));
+        if (_timer != null)
+            _timer.Terminate();
 
-        _timer.start();
+        _timer = new DriveTimer(this, Util.RoundReal(inches * 0.9));
 
-        if (_frontLeftMotor.getTargetPosition() < goal)
+        while (position <= target)
         {
-            while (_frontLeftMotor.getTargetPosition() < goal)
-            {
-                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-
-                SetFrontLeftSpeed(-power);
-                SetFrontRightSpeed(power);
-                SetBackLeftSpeed(-power);
-                SetBackRightSpeed(power);
-            }
+            Drive(power, power);
+            position = GetTicks();
         }
 
-        if (_frontLeftMotor.getTargetPosition() > goal)
+        while (position >= target)
         {
-            while (_frontLeftMotor.getTargetPosition() < goal)
-            {
-                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-
-                SetFrontLeftSpeed(power);
-                SetFrontRightSpeed(-power);
-                SetBackLeftSpeed(power);
-                SetBackRightSpeed(-power);
-            }
+            Drive(-power, -power);
+            position = GetTicks();
         }
 
         _timer.Terminate();
-        try
-        {
-            _timer.join();
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-
-        SetDriveSpeed(0);
-
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
     }
 
     public void TimedDrive(float leftPower, float rightPower, long millis)
@@ -160,57 +157,32 @@ public abstract class RevOpMode extends LinearOpMode
         }
     }
 
-    // TODO(Peacock): Test this
-    public void Turn(float degree, float speed)
+    public void Turn(float degree, float power)
     {
-        SetDriveSpeed(0);
+        float position = GetTicks();
+        float target = position + degree;
 
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        telemetry.addData("Target Ticks", String.valueOf(target));
 
-        float goal = _frontLeftMotor.getCurrentPosition() + degree;
-        telemetry.addData("Target: ", String.valueOf(goal));
+        if (_timer != null)
+            _timer.Terminate();
 
-        _frontLeftMotor.setTargetPosition(Util.RoundReal(goal));
+        // TODO(Peacock): Real wait time here
+        _timer = new DriveTimer(this, 20);
 
-        _timer.Terminate();
-        // TODO(Peacock): Real value here
-        _timer.SetDelay(15);
-
-        if (_frontLeftMotor.getTargetPosition() < goal)
+        while (position <= target)
         {
-            while (_frontLeftMotor.getTargetPosition() < goal)
-            {
-                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-
-                SetDriveSpeed(speed);
-            }
+            Drive(power, -power);
+            position = GetTicks();
         }
 
-        if (_frontLeftMotor.getTargetPosition() > goal)
+        while (position >= target)
         {
-            while (_frontLeftMotor.getTargetPosition() < goal)
-            {
-                telemetry.addData("Current: ", String.valueOf(_frontLeftMotor.getTargetPosition()));
-
-                SetFrontLeftSpeed(-speed);
-                SetFrontRightSpeed(speed);
-                SetBackLeftSpeed(-speed);
-                SetBackRightSpeed(speed);
-            }
+            Drive(-power, power);
+            position = GetTicks();
         }
 
         _timer.Terminate();
-        try
-        {
-            _timer.join();
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-
-        SetDriveSpeed(0);
-
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
     }
 
     public void SetLeftStick(double position)
