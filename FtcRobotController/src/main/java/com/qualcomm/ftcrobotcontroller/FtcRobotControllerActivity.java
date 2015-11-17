@@ -40,6 +40,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.hardware.Camera;
 import android.hardware.usb.UsbManager;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -73,13 +74,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 
-import us.newberg.revolution.RevCamera;
+import us.newberg.revolution.CameraHandler;
 
 public class FtcRobotControllerActivity extends Activity {
 
     // 9474
-    public static Activity activity;    // Temp workaround since this causes a memory leak
-    public static final int REQUEST_IMAGE_CAPTURE = 9;
+    public static final String REQUEST_IMAGE_CAPTURE = "REV_TAKE_PHOTO";
+    private Camera _camera;
     // 9474
 
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
@@ -138,6 +139,11 @@ public class FtcRobotControllerActivity extends Activity {
     if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(intent.getAction())) {
       // a new USB device has been attached
       DbgLog.msg("USB Device attached; app restart may be needed");
+
+        // 9474
+        // TODO(Peacock): Will this reset the robot after a USB device is plugged in?
+        requestRobotRestart();
+        // 9474
     }
   }
 
@@ -145,11 +151,12 @@ public class FtcRobotControllerActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-      // 9474
-      activity = this;
-      // 9474
-
     setContentView(R.layout.activity_ftc_controller);
+
+      // 9474
+      _camera = Camera.open();
+      CameraHandler.GetInstance().SetContext(getApplicationContext());
+      // 9474
 
     utility = new Utility(this);
     context = this;
@@ -315,11 +322,8 @@ public class FtcRobotControllerActivity extends Activity {
     }
 
       // 9474
-      if (request == REQUEST_IMAGE_CAPTURE && result == RESULT_OK)
-      {
-          Bitmap imageBitmap = (Bitmap)intent.getExtras().get("data");
-          RevCamera.AddPhoto(imageBitmap);
-      }
+      if (intent.getAction().equals(intent.getAction()))
+        _camera.takePicture(null, null, CameraHandler.GetInstance());
       // 9474
   }
 
