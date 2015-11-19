@@ -3,6 +3,8 @@ package us.newberg.revolution.opmodes;
 import com.peacock.common.math.Util;
 import com.qualcomm.ftccommon.DbgLog;
 
+import us.newberg.revolution.CameraHandler;
+
 /**
  * Revolution 2015-2016
  * FTC team 9474
@@ -43,10 +45,15 @@ public class DriverOpMode extends RevOpMode
             rightPower -= leftX;
         }
 
+        if (gamepad1.a)
+            AutoDrive(.5f, 12);
+
         Drive(leftPower, rightPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
+
+        telemetry.addData("Ticks", String.valueOf(GetTicks()));
     }
 
     // Based off the K9TankDrive scale function

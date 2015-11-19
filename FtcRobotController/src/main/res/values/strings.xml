@@ -65,5 +65,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <string name="pref_change_wifi_channel">Change Wifi Channel</string>
   <string name="pref_launch_configure">pref_launch_configure</string>
   <string name="pref_launch_autoconfigure">pref_launch_autoconfigure</string>
+    <string name="title_activity_camera">CameraActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

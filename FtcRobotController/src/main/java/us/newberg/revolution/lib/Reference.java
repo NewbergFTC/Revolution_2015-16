@@ -6,8 +6,8 @@ package us.newberg.revolution.lib;
  */
 public class Reference
 {
-    // TODO(Peacock): Find a real value
-    public static final float ENCODER_TICKS_PER_REVOLUTION = 1140;
+    // TODO(Peacock): Give or take a little
+    public static final float ENCODER_TICKS_PER_REVOLUTION = 1111;
     public static final float WHEEL_DIAMETER = 3.85f;
     public static final float WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * (float)Math.PI;
     // TODO(Peacock): Find a real value

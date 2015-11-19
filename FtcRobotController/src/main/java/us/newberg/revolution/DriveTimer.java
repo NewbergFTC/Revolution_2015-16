@@ -68,6 +68,7 @@ public class DriveTimer extends Thread
                 _running.set(false);
         }
 
+        _target.SetWriteMode();
         _target.SetBackRightSpeed(0);
         _target.SetBackLeftSpeed(0);
         _target.SetFrontLeftSpeed(0);

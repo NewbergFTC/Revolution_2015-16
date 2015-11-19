@@ -139,11 +139,6 @@ public class FtcRobotControllerActivity extends Activity {
     if (UsbManager.ACTION_USB_ACCESSORY_ATTACHED.equals(intent.getAction())) {
       // a new USB device has been attached
       DbgLog.msg("USB Device attached; app restart may be needed");
-
-        // 9474
-        // TODO(Peacock): Will this reset the robot after a USB device is plugged in?
-        requestRobotRestart();
-        // 9474
     }
   }
 
@@ -154,8 +149,8 @@ public class FtcRobotControllerActivity extends Activity {
     setContentView(R.layout.activity_ftc_controller);
 
       // 9474
-      _camera = Camera.open();
-      CameraHandler.GetInstance().SetContext(getApplicationContext());
+     // _camera = Camera.open();
+      //CameraHandler.GetInstance().SetContext(getApplicationContext());
       // 9474
 
     utility = new Utility(this);
@@ -256,6 +251,11 @@ public class FtcRobotControllerActivity extends Activity {
     }
   }
 
+  @Override
+  public void startActivity(Intent intent)
+  {
+    super.startActivity(intent);
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -322,8 +322,8 @@ public class FtcRobotControllerActivity extends Activity {
     }
 
       // 9474
-      if (intent.getAction().equals(intent.getAction()))
-        _camera.takePicture(null, null, CameraHandler.GetInstance());
+      //if (intent.getAction().equals(intent.getAction()))
+       // _camera.takePicture(null, null, CameraHandler.GetInstance());
       // 9474
   }
 

@@ -73,46 +73,60 @@ public abstract class RevOpMode extends LinearOpMode
 
         SetDriveSpeed(0);
 
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        WaitOneFullCycle();
+        WaitOneFullCycle();
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     }
 
     public int GetTicks()
     {
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        try
-        {
-            waitOneFullHardwareCycle();
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+        SetReadMode();
+        return _frontLeftMotor.getCurrentPosition();
+    }
 
-        int position = _frontLeftMotor.getCurrentPosition();
-
+    public void SetWriteMode()
+    {
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        try
-        {
-            waitOneFullHardwareCycle();
-        } catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
+        WaitOneFullCycle();
+        WaitOneFullCycle();
+        WaitOneFullCycle();
+    }
 
-        return position;
+    public void SetReadMode()
+    {
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        WaitOneFullCycle();
+        WaitOneFullCycle();
+        WaitOneFullCycle();
     }
 
     public void Drive(float leftPower, float rightPower)
     {
+        SetWriteMode();
+
         SetFrontLeftSpeed(-leftPower);
         SetBackLeftSpeed(-leftPower);
         SetFrontRightSpeed(rightPower);
         SetBackRightSpeed(rightPower);
     }
 
+    public void WaitOneFullCycle()
+    {
+        try
+        {
+            waitOneFullHardwareCycle();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void AutoDrive(float power, float inches)
     {
         float position = GetTicks();
-
         float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
         float target = position + ticks;
 
@@ -123,16 +137,28 @@ public abstract class RevOpMode extends LinearOpMode
 
         _timer = new DriveTimer(this, Util.RoundReal(inches * 0.9));
 
-        while (position <= target)
-        {
-            Drive(power, power);
-            position = GetTicks();
-        }
-
-        while (position >= target)
+        if (position <= target)
         {
             Drive(-power, -power);
-            position = GetTicks();
+            WaitOneFullCycle();
+
+            while (position <= target)
+            {
+                position = GetTicks();
+                WaitOneFullCycle();
+            }
+         }
+
+        if (position >= target)
+        {
+            Drive(power, power);
+            WaitOneFullCycle();
+
+            while (position >= target)
+            {
+                position = GetTicks();
+                WaitOneFullCycle();
+            }
         }
 
         _timer.Terminate();
@@ -185,17 +211,17 @@ public abstract class RevOpMode extends LinearOpMode
         _timer.Terminate();
     }
 
-    public void SetLeftStick(double position)
+    public void SetLeftStick(float position)
     {
         _leftStick.setPosition(position);
     }
 
-    public void SetRightStick(double position)
+    public void SetRightStick(float position)
     {
         _rightStick.setPosition(position);
     }
 
-    public void SetDriveSpeed(double speed)
+    public void SetDriveSpeed(float speed)
     {
         SetFrontLeftSpeed(speed);
         SetFrontRightSpeed(speed);
@@ -203,30 +229,30 @@ public abstract class RevOpMode extends LinearOpMode
         SetBackRightSpeed(speed);
     }
 
-    public void SetFrontLeftSpeed(double speed)
+    public void SetFrontLeftSpeed(float speed)
     {
-        double spd = Util.Clampd(speed, -1.0, 1.0);
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
 
         _frontLeftMotor.setPower(spd);
     }
 
-    public void SetFrontRightSpeed(double speed)
+    public void SetFrontRightSpeed(float speed)
     {
-        double spd = Util.Clampd(speed, -1.0, 1.0);
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
 
         _frontRightMotor.setPower(spd);
     }
 
-    public void SetBackLeftSpeed(double speed)
+    public void SetBackLeftSpeed(float speed)
     {
-        double spd = Util.Clampd(speed, -1.0, 1.0);
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
 
         _backLeftMotor.setPower(spd);
     }
 
-    public void SetBackRightSpeed(double speed)
+    public void SetBackRightSpeed(float speed)
     {
-        double spd = Util.Clampd(speed, -1.0, 1.0);
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
 
         _backRightMotor.setPower(spd);
     }

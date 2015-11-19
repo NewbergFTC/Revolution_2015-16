@@ -15,19 +15,19 @@ import java.util.ArrayList;
 public class CameraHandler implements Camera.PictureCallback
 {
     private static CameraHandler INSTANCE;
-    public static ArrayList<byte[]> pictures = new ArrayList<byte[]>();
-
+    public ArrayList<byte[]> _pictures;// = new ArrayList<byte[]>();
     private Context _context;
 
     public CameraHandler()
     {
-
+        _pictures = new ArrayList<byte[]>();
+        _context = null;
     }
 
     @Override
     public void onPictureTaken(byte[] data, Camera camera)
     {
-        pictures.add(data);
+        _pictures.add(data);
     }
 
     public void SetContext(Context context)
@@ -39,23 +39,24 @@ public class CameraHandler implements Camera.PictureCallback
     {
         Intent intent = new Intent();
         intent.setAction(FtcRobotControllerActivity.REQUEST_IMAGE_CAPTURE);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         _context.startActivity(intent);
     }
 
-    public static ArrayList<byte[]> GetPictures()
+    public ArrayList<byte[]> GetPictures()
     {
-        return pictures;
+        return _pictures;
     }
 
-    public static int GetPicCount()
+    public int GetPicCount()
     {
-        return pictures.size();
+        return _pictures.size();
     }
 
-    public static byte[] GetLastPic()
+    public byte[] GetLastPic()
     {
-        return pictures.get(pictures.size() - 1);
+        return _pictures.get(_pictures.size() - 1);
     }
 
     public static CameraHandler GetInstance()
