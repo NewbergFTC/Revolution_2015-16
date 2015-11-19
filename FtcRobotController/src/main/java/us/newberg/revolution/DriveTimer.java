@@ -26,11 +26,19 @@ public class DriveTimer extends Thread
         _running = new AtomicBoolean(false);
     }
 
+    /**
+     * Stops the timer without stopping the motors
+     */
     synchronized public void Terminate()
     {
         _running.set(false);
     }
 
+    /**
+     * Set the timer delay
+     *
+     * @param millis Delay in milliseconds
+     */
     synchronized public void SetDelay(long millis)
     {
         _millis.set(millis);

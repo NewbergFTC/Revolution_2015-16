@@ -4,7 +4,7 @@ package us.newberg.revolution.opmodes;
  * Revolution 2015-2016
  * FTC team 9474
  */
-// TODO(Peacock): Plan at least two autonomous modes, one for each color team
+// TODO(Peacock): Update this to use encoders
 public class AutoBlueOpMode extends RevOpMode
 {
     @Override
@@ -33,10 +33,4 @@ public class AutoBlueOpMode extends RevOpMode
         TimedDrive(0.5f, 0.5f, 1500);
         waitOneFullHardwareCycle();
     }
-
-    @Override
-    public void Initialize() {}
-
-    @Override
-    public void Update() {}
 }

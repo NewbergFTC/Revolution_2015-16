@@ -12,12 +12,6 @@ import us.newberg.revolution.CameraHandler;
 public class DriverOpMode extends RevOpMode
 {
     @Override
-    public void Initialize()
-    {
-
-    }
-
-    @Override
     public void Update()
     {
         // TODO(Peacock): Talk with drivers about desired controls
@@ -45,15 +39,10 @@ public class DriverOpMode extends RevOpMode
             rightPower -= leftX;
         }
 
-        if (gamepad1.a)
-            AutoDrive(.5f, 12);
-
         Drive(leftPower, rightPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
-
-        telemetry.addData("Ticks", String.valueOf(GetTicks()));
     }
 
     // Based off the K9TankDrive scale function

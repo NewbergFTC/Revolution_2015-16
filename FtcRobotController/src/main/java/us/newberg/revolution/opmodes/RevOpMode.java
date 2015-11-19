@@ -13,7 +13,7 @@ import us.newberg.revolution.lib.Reference;
  * Revolution 2015-2016
  * FTC team 9474
  */
-public abstract class RevOpMode extends LinearOpMode
+public class RevOpMode extends LinearOpMode
 {
     // Drive motors
     protected DcMotor _frontLeftMotor;
@@ -21,13 +21,12 @@ public abstract class RevOpMode extends LinearOpMode
     protected DcMotor _backLeftMotor;
     protected DcMotor _backRightMotor;
 
+    // Motor controllers
     protected DcMotorController _frontController;
     protected DcMotorController _backController;
 
-    // Zip-line stick things
-    protected Servo _leftStick;
-    protected Servo _rightStick;
-
+    // Drive timer
+    // For timed autonomous stuff
     protected DriveTimer _timer;
 
     public RevOpMode()
@@ -55,9 +54,12 @@ public abstract class RevOpMode extends LinearOpMode
         }
     }
 
-    public abstract void Initialize();
-    public abstract void Update();
+    public void Initialize() {}
+    public void Update() {}
 
+    /**
+     * Initialize required components
+     */
     protected final void Init()
     {
         _frontLeftMotor = hardwareMap.dcMotor.get("frontLeft");
@@ -68,50 +70,16 @@ public abstract class RevOpMode extends LinearOpMode
         _frontController = hardwareMap.dcMotorController.get("frontCon");
         _backController = hardwareMap.dcMotorController.get("backCon");
 
-        //_leftStick = hardwareMap.servo.get("leftStick");
-        //_rightStick = hardwareMap.servo.get("rightStick");
-
-        SetDriveSpeed(0);
-
         _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        WaitOneFullCycle();
         WaitOneFullCycle();
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     }
 
-    public int GetTicks()
-    {
-        SetReadMode();
-        return _frontLeftMotor.getCurrentPosition();
-    }
-
-    public void SetWriteMode()
-    {
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        WaitOneFullCycle();
-        WaitOneFullCycle();
-        WaitOneFullCycle();
-    }
-
-    public void SetReadMode()
-    {
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        WaitOneFullCycle();
-        WaitOneFullCycle();
-        WaitOneFullCycle();
-    }
-
-    public void Drive(float leftPower, float rightPower)
-    {
-        SetWriteMode();
-
-        SetFrontLeftSpeed(-leftPower);
-        SetBackLeftSpeed(-leftPower);
-        SetFrontRightSpeed(rightPower);
-        SetBackRightSpeed(rightPower);
-    }
-
+    /**
+     * Waits on full hardware cycle
+     * Catches any exception waiting might throw
+     */
     public void WaitOneFullCycle()
     {
         try
@@ -124,46 +92,66 @@ public abstract class RevOpMode extends LinearOpMode
         }
     }
 
-    public void AutoDrive(float power, float inches)
+    /**
+     * Sets the fontCon to WRITE_ONLY, then waits three full hardware cycles
+     */
+    public void SetWriteMode()
     {
-        float position = GetTicks();
-        float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
-        float target = position + ticks;
-
-        telemetry.addData("Target Ticks", String.valueOf(target));
-
-        if (_timer != null)
-            _timer.Terminate();
-
-        _timer = new DriveTimer(this, Util.RoundReal(inches * 0.9));
-
-        if (position <= target)
-        {
-            Drive(-power, -power);
-            WaitOneFullCycle();
-
-            while (position <= target)
-            {
-                position = GetTicks();
-                WaitOneFullCycle();
-            }
-         }
-
-        if (position >= target)
-        {
-            Drive(power, power);
-            WaitOneFullCycle();
-
-            while (position >= target)
-            {
-                position = GetTicks();
-                WaitOneFullCycle();
-            }
-        }
-
-        _timer.Terminate();
+        // TODO(Peacock): How many cycles should we wait?
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        WaitOneFullCycle();
+        WaitOneFullCycle();
+        WaitOneFullCycle();
     }
 
+    /**
+     * Sets the fontCon to READ_ONLY, then waits three full hardware cycles
+     */
+    public void SetReadMode()
+    {
+        // TODO(Peacock): How many cycles should we wait?
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        WaitOneFullCycle();
+        WaitOneFullCycle();
+        WaitOneFullCycle();
+    }
+
+    /**
+     * Get the number of ticks from the frontLeft motor
+     * Sets the frontCon to READ_ONLY
+     *
+     * @return Number of ticks
+     */
+    public int GetTicks()
+    {
+        SetReadMode();
+        return _frontLeftMotor.getCurrentPosition();
+    }
+
+    /**
+     * Sets the drive motors to their respective powers
+     * Sets the frontCon to WRITE_ONLY
+     *
+     * @param leftPower  Left side motor power (-1, 1)
+     * @param rightPower Right side motor power (-1, 1)
+     */
+    public void Drive(float leftPower, float rightPower)
+    {
+        SetWriteMode();
+
+        SetFrontLeftSpeed(-leftPower);
+        SetBackLeftSpeed(-leftPower);
+        SetFrontRightSpeed(rightPower);
+        SetBackRightSpeed(rightPower);
+    }
+
+    /**
+     * Drives for some amount of time at some power
+     *
+     * @param leftPower  Left side motor power (-1, 1)
+     * @param rightPower Right side motor power (-1, 1)
+     * @param millis     Time to wait in milliseconds
+     */
     public void TimedDrive(float leftPower, float rightPower, long millis)
     {
         if (_timer != null)
@@ -183,52 +171,57 @@ public abstract class RevOpMode extends LinearOpMode
         }
     }
 
-    public void Turn(float degree, float power)
+    /**
+     * Drives forward or backward for some distance at some power
+     *
+     * @param power  Drive Power
+     * @param inches Distance in inches
+     */
+    public void AutoDrive(float power, float inches)
     {
         float position = GetTicks();
-        float target = position + degree;
+        float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
+        float target = position + ticks;
 
         telemetry.addData("Target Ticks", String.valueOf(target));
 
         if (_timer != null)
             _timer.Terminate();
 
-        // TODO(Peacock): Real wait time here
-        _timer = new DriveTimer(this, 20);
+        _timer = new DriveTimer(this, Util.RoundReal(inches * 0.9));
 
-        while (position <= target)
+        if (position <= target)
         {
-            Drive(power, -power);
-            position = GetTicks();
-        }
+            Drive(-power, -power);
 
-        while (position >= target)
+            while (position <= target)
+            {
+                position = GetTicks();
+                telemetry.addData("Ticks", String.valueOf(position));
+                telemetry.addData("Target", String.valueOf(target));
+            }
+         }
+
+        if (position >= target)
         {
-            Drive(-power, power);
-            position = GetTicks();
+            Drive(power, power);
+
+            while (position >= target)
+            {
+                position = GetTicks();
+                telemetry.addData("Ticks", String.valueOf(position));
+                telemetry.addData("Target", String.valueOf(target));
+            }
         }
 
         _timer.Terminate();
     }
 
-    public void SetLeftStick(float position)
-    {
-        _leftStick.setPosition(position);
-    }
-
-    public void SetRightStick(float position)
-    {
-        _rightStick.setPosition(position);
-    }
-
-    public void SetDriveSpeed(float speed)
-    {
-        SetFrontLeftSpeed(speed);
-        SetFrontRightSpeed(speed);
-        SetBackLeftSpeed(speed);
-        SetBackRightSpeed(speed);
-    }
-
+    /**
+     * Sets the front left motor speed
+     *
+     * @param speed Motor speed
+     */
     public void SetFrontLeftSpeed(float speed)
     {
         float spd = Util.Clampf(speed, -1.0f, 1.0f);
@@ -236,6 +229,11 @@ public abstract class RevOpMode extends LinearOpMode
         _frontLeftMotor.setPower(spd);
     }
 
+    /**
+     * Sets the front right motor speed
+     *
+     * @param speed Motor speed
+     */
     public void SetFrontRightSpeed(float speed)
     {
         float spd = Util.Clampf(speed, -1.0f, 1.0f);
@@ -243,6 +241,11 @@ public abstract class RevOpMode extends LinearOpMode
         _frontRightMotor.setPower(spd);
     }
 
+    /**
+     * Sets the back left motor speed
+     *
+     * @param speed Motor speed
+     */
     public void SetBackLeftSpeed(float speed)
     {
         float spd = Util.Clampf(speed, -1.0f, 1.0f);
@@ -250,6 +253,11 @@ public abstract class RevOpMode extends LinearOpMode
         _backLeftMotor.setPower(spd);
     }
 
+    /**
+     * Sets the back right motor speed
+     *
+     * @param speed Motor speed
+     */
     public void SetBackRightSpeed(float speed)
     {
         float spd = Util.Clampf(speed, -1.0f, 1.0f);

@@ -12,10 +12,12 @@ import java.util.ArrayList;
  * Revolution 2015-2016
  * FTC team 9474
  */
+// TODO(Peacock): Make this work, somehow
 public class CameraHandler implements Camera.PictureCallback
 {
     private static CameraHandler INSTANCE;
-    public ArrayList<byte[]> _pictures;// = new ArrayList<byte[]>();
+
+    public ArrayList<byte[]> _pictures;
     private Context _context;
 
     public CameraHandler()
