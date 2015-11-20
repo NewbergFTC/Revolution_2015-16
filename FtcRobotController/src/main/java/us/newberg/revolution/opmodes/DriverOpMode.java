@@ -12,6 +12,12 @@ import us.newberg.revolution.CameraHandler;
 public class DriverOpMode extends RevOpMode
 {
     @Override
+    public void Initialize()
+    {
+        SetWriteMode();
+    }
+
+    @Override
     public void Update()
     {
         // TODO(Peacock): Talk with drivers about desired controls

@@ -4,7 +4,6 @@ import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import us.newberg.revolution.DriveTimer;
 import us.newberg.revolution.lib.Reference;
@@ -93,27 +92,41 @@ public class RevOpMode extends LinearOpMode
     }
 
     /**
-     * Sets the fontCon to WRITE_ONLY, then waits three full hardware cycles
+     * Sets the fontCon to WRITE_ONLY, then waits one full hardware cycles
      */
     public void SetWriteMode()
     {
-        // TODO(Peacock): How many cycles should we wait?
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        WaitOneFullCycle();
-        WaitOneFullCycle();
-        WaitOneFullCycle();
+        switch (_frontController.getMotorControllerDeviceMode())
+        {
+            case WRITE_ONLY:
+                break;
+            case SWITCHING_TO_WRITE_MODE:
+                WaitOneFullCycle();
+                break;
+            default:
+                _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+                WaitOneFullCycle();
+                break;
+        }
     }
 
     /**
-     * Sets the fontCon to READ_ONLY, then waits three full hardware cycles
+     * Sets the fontCon to READ_ONLY, then waits one full hardware cycle
      */
     public void SetReadMode()
     {
-        // TODO(Peacock): How many cycles should we wait?
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-        WaitOneFullCycle();
-        WaitOneFullCycle();
-        WaitOneFullCycle();
+        switch (_frontController.getMotorControllerDeviceMode())
+        {
+            case READ_ONLY:
+                break;
+            case SWITCHING_TO_READ_MODE:
+                WaitOneFullCycle();
+                break;
+            default:
+                _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+                WaitOneFullCycle();
+                break;
+        }
     }
 
     /**
@@ -138,7 +151,6 @@ public class RevOpMode extends LinearOpMode
     public void Drive(float leftPower, float rightPower)
     {
         SetWriteMode();
-
         SetFrontLeftSpeed(-leftPower);
         SetBackLeftSpeed(-leftPower);
         SetFrontRightSpeed(rightPower);
@@ -179,6 +191,9 @@ public class RevOpMode extends LinearOpMode
      */
     public void AutoDrive(float power, float inches)
     {
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        WaitOneFullCycle();
+
         float position = GetTicks();
         float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
         float target = position + ticks;
@@ -188,11 +203,13 @@ public class RevOpMode extends LinearOpMode
         if (_timer != null)
             _timer.Terminate();
 
-        _timer = new DriveTimer(this, Util.RoundReal(inches * 0.9));
+        _timer = new DriveTimer(this, Util.RoundReal(inches));
 
         if (position <= target)
         {
             Drive(-power, -power);
+
+            WaitOneFullCycle();
 
             while (position <= target)
             {
@@ -206,6 +223,8 @@ public class RevOpMode extends LinearOpMode
         {
             Drive(power, power);
 
+            WaitOneFullCycle();
+
             while (position >= target)
             {
                 position = GetTicks();
@@ -215,6 +234,8 @@ public class RevOpMode extends LinearOpMode
         }
 
         _timer.Terminate();
+
+        Drive(0, 0);
     }
 
     /**

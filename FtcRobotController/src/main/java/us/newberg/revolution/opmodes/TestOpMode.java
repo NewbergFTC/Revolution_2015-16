@@ -13,6 +13,6 @@ public class TestOpMode extends RevOpMode
 
         waitForStart();
 
-        AutoDrive(0.25f, 50);
+        AutoDrive(0.2f, 12);
     }
 }
