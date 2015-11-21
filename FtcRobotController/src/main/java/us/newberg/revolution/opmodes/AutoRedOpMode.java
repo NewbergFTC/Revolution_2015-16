@@ -14,23 +14,15 @@ public class AutoRedOpMode extends RevOpMode
 
         waitForStart();
 
-        TimedDrive(-0.15f, -0.15f, 1000);
-        waitOneFullHardwareCycle();
-        TimedDrive(0.25f, -0.25f, 1000);
-        waitOneFullHardwareCycle();
-        TimedDrive(-0.15f, -0.15f, 3800);
-        waitOneFullHardwareCycle();
-        TimedDrive(-0.25f, 0.25f, 900);
-        waitOneFullHardwareCycle();
-        TimedDrive(-0.15f, -0.15f, 1800);
-        waitOneFullHardwareCycle();
-        TimedDrive(0.25f, -0.25f, 1000);
-        waitOneFullHardwareCycle();
-        TimedDrive(-1.0f, -1.0f, 1000);
-        waitOneFullHardwareCycle();
-        TimedDrive(0.0f, 0.0f, 5000);
-        waitOneFullHardwareCycle();
-        TimedDrive(0.5f, 0.5f, 1500);
-        waitOneFullHardwareCycle();
+        AutoDrive(0.72f, 23.2f);
+        sleep(1500);
+        Turn(-32, 0.45f);
+        sleep(1500);
+        AutoDrive(0.72f, 54f);
+        sleep(1500);
+        Turn(-32, 0.45f);
+        sleep(1500);
+        AutoDrive(1.0f, 38);
+        sleep(1500);
     }
 }

@@ -138,6 +138,16 @@ public class RevOpMode extends LinearOpMode
         }
     }
 
+    public void Wait() throws InterruptedException
+    {
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+    }
+
     /**
      * Drives forward or backward for some distance at some power
      *
@@ -148,39 +158,19 @@ public class RevOpMode extends LinearOpMode
     {
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+        Wait();
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+        Wait();
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+        Wait();
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+        Wait();
 
         float position = _frontLeftMotor.getCurrentPosition();
         float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
@@ -190,33 +180,17 @@ public class RevOpMode extends LinearOpMode
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+        Wait();
 
         if (position <= target)
         {
             Drive(-power, -power);
 
-            waitForNextHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
+            Wait();
 
             _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
 
-            waitForNextHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
+            Wait();
 
             while (position <= target)
             {
@@ -231,21 +205,11 @@ public class RevOpMode extends LinearOpMode
         {
             Drive(power, power);
 
-            waitForNextHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
+            Wait();
 
             _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
 
-            waitForNextHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
-            waitOneFullHardwareCycle();
+            Wait();
 
             while (position >= target)
             {
@@ -259,8 +223,67 @@ public class RevOpMode extends LinearOpMode
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
+        Wait();
+
+        Drive(0, 0);
+    }
+
+    public void Turn(float degree, float power) throws InterruptedException
+    {
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        Wait();
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        Wait();
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        Wait();
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        Wait();
+
+        float position = _frontLeftMotor.getCurrentPosition();
+        float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * degree / 360;
+        float target = position + ticks;
+        target *= 53;
+
+        telemetry.addData("Target", String.valueOf(target));
+
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        Wait();
+
+        if (position < target)  // Right
+        {
+            Drive(-power, power);
+
+            Wait();
+            _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+            Wait();
+
+            while (position < target)
+            {
+                position = _frontLeftMotor.getCurrentPosition();
+                telemetry.addData("Ticks:", String.valueOf(position));
+
+                waitForNextHardwareCycle();
+            }
+        }
+        else if (position > target) // Left
+        {
+            Drive(power, -power);
+
+            Wait();
+            _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+            Wait();
+
+            while (position > target)
+            {
+                position = _frontLeftMotor.getCurrentPosition();
+                telemetry.addData("Ticks:", String.valueOf(position));
+
+                waitForNextHardwareCycle();
+            }
+        }
+
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        Wait();
 
         Drive(0, 0);
     }
