@@ -2,6 +2,7 @@ package us.newberg.revolution.opmodes;
 
 import com.peacock.common.math.Util;
 import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import us.newberg.revolution.CameraHandler;
 
@@ -14,7 +15,7 @@ public class DriverOpMode extends RevOpMode
     @Override
     public void Initialize()
     {
-        SetWriteMode();
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     }
 
     @Override

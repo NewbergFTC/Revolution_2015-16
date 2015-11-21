@@ -59,7 +59,7 @@ public class RevOpMode extends LinearOpMode
     /**
      * Initialize required components
      */
-    protected final void Init()
+    protected final void Init() throws InterruptedException
     {
         _frontLeftMotor = hardwareMap.dcMotor.get("frontLeft");
         _frontRightMotor = hardwareMap.dcMotor.get("frontRight");
@@ -70,91 +70,41 @@ public class RevOpMode extends LinearOpMode
         _backController = hardwareMap.dcMotorController.get("backCon");
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        WaitOneFullCycle();
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     }
 
     /**
-     * Waits on full hardware cycle
-     * Catches any exception waiting might throw
-     */
-    public void WaitOneFullCycle()
-    {
-        try
-        {
-            waitOneFullHardwareCycle();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Sets the fontCon to WRITE_ONLY, then waits one full hardware cycles
-     */
-    public void SetWriteMode()
-    {
-        switch (_frontController.getMotorControllerDeviceMode())
-        {
-            case WRITE_ONLY:
-                break;
-            case SWITCHING_TO_WRITE_MODE:
-                WaitOneFullCycle();
-                break;
-            default:
-                _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-                WaitOneFullCycle();
-                break;
-        }
-    }
-
-    /**
-     * Sets the fontCon to READ_ONLY, then waits one full hardware cycle
-     */
-    public void SetReadMode()
-    {
-        switch (_frontController.getMotorControllerDeviceMode())
-        {
-            case READ_ONLY:
-                break;
-            case SWITCHING_TO_READ_MODE:
-                WaitOneFullCycle();
-                break;
-            default:
-                _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-                WaitOneFullCycle();
-                break;
-        }
-    }
-
-    /**
-     * Get the number of ticks from the frontLeft motor
-     * Sets the frontCon to READ_ONLY
-     *
-     * @return Number of ticks
-     */
-    public int GetTicks()
-    {
-        SetReadMode();
-        return _frontLeftMotor.getCurrentPosition();
-    }
-
-    /**
      * Sets the drive motors to their respective powers
-     * Sets the frontCon to WRITE_ONLY
      *
      * @param leftPower  Left side motor power (-1, 1)
      * @param rightPower Right side motor power (-1, 1)
      */
     public void Drive(float leftPower, float rightPower)
     {
-        SetWriteMode();
-        SetFrontLeftSpeed(-leftPower);
-        SetBackLeftSpeed(-leftPower);
-        SetFrontRightSpeed(rightPower);
-        SetBackRightSpeed(rightPower);
+        double leftSpd = Util.Clampd(leftPower * 1.2, -1.0, 1.0);
+        double rightSpd = Util.Clampd(rightPower, -1.0, 1.0);
+
+        _frontLeftMotor.setPower(-leftSpd);
+        _backLeftMotor.setPower(-leftSpd);
+        _frontRightMotor.setPower(rightSpd);
+        _backRightMotor.setPower(rightSpd);
     }
 
     /**
@@ -164,12 +114,17 @@ public class RevOpMode extends LinearOpMode
      * @param rightPower Right side motor power (-1, 1)
      * @param millis     Time to wait in milliseconds
      */
-    public void TimedDrive(float leftPower, float rightPower, long millis)
+    public void TimedDrive(float leftPower, float rightPower, long millis) throws InterruptedException
     {
         if (_timer != null)
             _timer.Terminate();
 
         _timer = new DriveTimer(this, millis);
+
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
 
         _timer.start();
         Drive(leftPower, rightPower);
@@ -189,51 +144,123 @@ public class RevOpMode extends LinearOpMode
      * @param power  Drive Power
      * @param inches Distance in inches
      */
-    public void AutoDrive(float power, float inches)
+    public void AutoDrive(float power, float inches) throws InterruptedException
     {
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        WaitOneFullCycle();
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-        float position = GetTicks();
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        float position = _frontLeftMotor.getCurrentPosition();
         float ticks = (Reference.ENCODER_TICKS_PER_REVOLUTION / Reference.WHEEL_CIRCUMFERENCE) * inches;
         float target = position + ticks;
 
         telemetry.addData("Target Ticks", String.valueOf(target));
 
-        if (_timer != null)
-            _timer.Terminate();
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
-        _timer = new DriveTimer(this, Util.RoundReal(inches));
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
 
         if (position <= target)
         {
             Drive(-power, -power);
 
-            WaitOneFullCycle();
+            waitForNextHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+
+            _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+            waitForNextHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
 
             while (position <= target)
             {
-                position = GetTicks();
+                position = _frontLeftMotor.getCurrentPosition();
                 telemetry.addData("Ticks", String.valueOf(position));
                 telemetry.addData("Target", String.valueOf(target));
-            }
-         }
 
-        if (position >= target)
+                waitForNextHardwareCycle();
+            }
+        }
+        else if (position >= target)
         {
             Drive(power, power);
 
-            WaitOneFullCycle();
+            waitForNextHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+
+            _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+            waitForNextHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
 
             while (position >= target)
             {
-                position = GetTicks();
+                position = _frontLeftMotor.getCurrentPosition();
                 telemetry.addData("Ticks", String.valueOf(position));
                 telemetry.addData("Target", String.valueOf(target));
+
+                waitForNextHardwareCycle();
             }
         }
 
-        _timer.Terminate();
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
 
         Drive(0, 0);
     }

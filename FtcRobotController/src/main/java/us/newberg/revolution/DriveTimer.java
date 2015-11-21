@@ -75,8 +75,7 @@ public class DriveTimer extends Thread
             if (_millis.get() <= 0)
                 _running.set(false);
         }
-
-        _target.SetWriteMode();
+        
         _target.SetBackRightSpeed(0);
         _target.SetBackLeftSpeed(0);
         _target.SetFrontLeftSpeed(0);
