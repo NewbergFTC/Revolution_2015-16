@@ -14,13 +14,13 @@ public class AutoBlueOpMode extends RevOpMode
 
         waitForStart();
 
-        AutoDrive(0.72f, 23.5f);
+        AutoDrive(0.5f, 23.2f);
+        sleep(10000);
+        Turn(35, 0.25f);
         sleep(1500);
-        Turn(32, 0.5f);
+        AutoDrive(0.5f, 54f);
         sleep(1500);
-        AutoDrive(0.72f, 53.5f);
-        sleep(1500);
-        Turn(32, 0.5f);
+        Turn(31, 0.2f);
         sleep(1500);
         AutoDrive(1.0f, 38);
         sleep(1500);
