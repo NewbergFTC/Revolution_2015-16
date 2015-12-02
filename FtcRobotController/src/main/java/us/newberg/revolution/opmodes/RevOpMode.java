@@ -3,6 +3,7 @@ package us.newberg.revolution.opmodes;
 import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import us.newberg.revolution.DriveTimer;
@@ -23,6 +24,10 @@ public class RevOpMode extends LinearOpMode
     // Motor controllers
     protected DcMotorController _frontController;
     protected DcMotorController _backController;
+
+	// Stick servos
+	protected Servo _leftStickServo;
+	protected Servo _rightStickServo;
 
     // Drive timer
     // For timed autonomous stuff
@@ -69,23 +74,14 @@ public class RevOpMode extends LinearOpMode
         _frontController = hardwareMap.dcMotorController.get("frontCon");
         _backController = hardwareMap.dcMotorController.get("backCon");
 
-        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+		_leftStickServo = hardwareMap.servo.get("leftStick");
+		_rightStickServo = hardwareMap.servo.get("rightStick");
 
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+        _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+		Wait();
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
+		Wait();
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
     }
@@ -98,7 +94,8 @@ public class RevOpMode extends LinearOpMode
      */
     public void Drive(float leftPower, float rightPower)
     {
-        double leftSpd = Util.Clampd(leftPower * 1.2, -1.0, 1.0);
+    	// TODO(Peacock): Is the left side drifting?
+        double leftSpd = Util.Clampd(leftPower, -1.0, 1.0);
         double rightSpd = Util.Clampd(rightPower, -1.0, 1.0);
 
         _frontLeftMotor.setPower(-leftSpd);
@@ -122,9 +119,7 @@ public class RevOpMode extends LinearOpMode
         _timer = new DriveTimer(this, millis);
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
+		Wait();
 
         _timer.start();
         Drive(leftPower, rightPower);
@@ -138,6 +133,9 @@ public class RevOpMode extends LinearOpMode
         }
     }
 
+	/**
+	 * Waits for 1+5 hardware cycles
+	 */
     public void Wait() throws InterruptedException
     {
         waitForNextHardwareCycle();
@@ -157,19 +155,15 @@ public class RevOpMode extends LinearOpMode
     public void AutoDrive(float power, float inches) throws InterruptedException
     {
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-
         Wait();
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-
         Wait();
 
         _frontLeftMotor.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
         Wait();
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-
         Wait();
 
         float position = _frontLeftMotor.getCurrentPosition();
@@ -179,17 +173,14 @@ public class RevOpMode extends LinearOpMode
         telemetry.addData("Target Ticks", String.valueOf(target));
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-
         Wait();
 
         if (position <= target)
         {
             Drive(-power, -power);
-
             Wait();
 
             _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-
             Wait();
 
             while (position <= target)
@@ -204,11 +195,9 @@ public class RevOpMode extends LinearOpMode
         else if (position >= target)
         {
             Drive(power, power);
-
             Wait();
 
             _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
-
             Wait();
 
             while (position >= target)
@@ -222,7 +211,6 @@ public class RevOpMode extends LinearOpMode
         }
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-
         Wait();
 
         Drive(0, 0);
@@ -252,8 +240,8 @@ public class RevOpMode extends LinearOpMode
         if (position < target)  // Right
         {
             Drive(-power, power);
-
             Wait();
+
             _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
             Wait();
 
@@ -268,8 +256,8 @@ public class RevOpMode extends LinearOpMode
         else if (position > target) // Left
         {
             Drive(power, -power);
-
             Wait();
+
             _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
             Wait();
 

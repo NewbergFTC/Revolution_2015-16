@@ -46,6 +46,18 @@ public class DriverOpMode extends RevOpMode
             rightPower -= leftX;
         }
 
+		if (gamepad1.a)
+			_leftStickServo.setPosition(1);
+
+		if (gamepad1.b)
+			_leftStickServo.setPosition(0);
+
+		if (gamepad1.x)
+			_rightStickServo.setPosition(1);
+
+		if (gamepad1.y)
+			_rightStickServo.setPosition(0);
+
         Drive(leftPower, rightPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
