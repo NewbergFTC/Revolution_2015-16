@@ -46,14 +46,21 @@ public class DriverOpMode extends RevOpMode
             rightPower -= leftX;
         }
 
+		// TODO(Peacock): Timer for the down servos
+		// When one servo is lower, raise the other
+
 		if (gamepad1.a)
-			_leftStickServo.setPosition(1);
+		{
+			_leftStickServo.setPosition(0.45f);
+		}
 
 		if (gamepad1.b)
 			_leftStickServo.setPosition(0);
 
 		if (gamepad1.x)
-			_rightStickServo.setPosition(1);
+		{
+			_rightStickServo.setPosition(0.45f);
+		}
 
 		if (gamepad1.y)
 			_rightStickServo.setPosition(0);
