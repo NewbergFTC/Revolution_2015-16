@@ -17,7 +17,7 @@ public class CameraHandler implements Camera.PictureCallback
 {
     private static CameraHandler INSTANCE;
 
-    public ArrayList<byte[]> _pictures;
+    public final ArrayList<byte[]> _pictures;
     private Context _context;
 
     public CameraHandler()

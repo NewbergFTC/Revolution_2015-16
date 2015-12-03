@@ -1,12 +1,10 @@
 package us.newberg.revolution.opmodes;
 
 import com.peacock.common.math.Util;
-import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import us.newberg.revolution.CameraHandler;
-import us.newberg.revolution.DriveTimer;
 import us.newberg.revolution.ServoTimer;
+import us.newberg.revolution.lib.Reference;
 
 /**
  * Revolution 2015-2016
@@ -18,9 +16,9 @@ public class DriverOpMode extends RevOpMode
     public void Initialize()
     {
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-        // TODO(Peacock): Make the positions const 
-		_leftStickServo.setPosition(0);
-		_rightStickServo.setPosition(0.45f);
+
+		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
+		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
     }
 
     @Override
@@ -31,8 +29,6 @@ public class DriverOpMode extends RevOpMode
         // Get and scale the joystick values
         float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
         float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
-        //float rightYOne = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f);
-        //float rightXOne = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
 
         // Calculate tank drive speed for each side
         float leftPower = Scale(leftYOne);
@@ -51,13 +47,10 @@ public class DriverOpMode extends RevOpMode
             rightPower -= leftX;
         }
 
-		// TODO(Peacock): Timer for the down servos
-		// When one servo is lower, raise the other
-
 		if (gamepad1.a)
 		{
-			_leftStickServo.setPosition(0.45f);
-			_rightStickServo.setPosition(0.45f);
+			_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
+			_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
 
 			_servoTimer.Terminate();
 			_servoTimer = new ServoTimer(this, 5000);
@@ -65,12 +58,12 @@ public class DriverOpMode extends RevOpMode
 		}
 
 		if (gamepad1.b)
-			_leftStickServo.setPosition(0);
+			_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 
 		if (gamepad1.x)
 		{
-			_rightStickServo.setPosition(0);
-			_leftStickServo.setPosition(0);
+			_rightStickServo.setPosition(Reference.RIGHT_SERVO_DEPLOYED);
+			_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 
 			_servoTimer.Terminate();
 			_servoTimer = new ServoTimer(this, 5000);
@@ -78,7 +71,7 @@ public class DriverOpMode extends RevOpMode
 		}
 
 		if (gamepad1.y)
-			_rightStickServo.setPosition(0.45f);
+			_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
 
         Drive(leftPower, rightPower);
 
