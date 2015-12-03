@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import us.newberg.revolution.DriveTimer;
+import us.newberg.revolution.ServoTimer;
 import us.newberg.revolution.lib.Reference;
 
 /**
@@ -33,11 +34,15 @@ public class RevOpMode extends LinearOpMode
     // For timed autonomous stuff
     protected DriveTimer _timer;
 
+	// Servo timer
+	protected ServoTimer _servoTimer;
+
     public RevOpMode()
     {
         super();
 
         _timer = new DriveTimer(this, 0);
+        _servoTimer = new ServoTimer(this, 0);
     }
 
     @Override
@@ -275,6 +280,28 @@ public class RevOpMode extends LinearOpMode
 
         Drive(0, 0);
     }
+
+	/**
+	 * Clamps the value between 0 and 1
+	 *
+	 * @param position Servo position between 0 and 1
+	 */
+	public void SetLeftStickPosition(float position)
+	{
+		float pos = Util.Clampf(position, 0.0f, 1.0f);
+		_leftStickServo.setPosition(pos);
+	}
+
+	/**
+	 * Clamps the value between 0 and 1
+	 *
+	 * @param position Servo position between 0 and 1
+	 */
+	public void SetRightStickPosition(float position)
+	{
+		float pos = Util.Clampf(position, 0.0f, 1.0f);
+		_rightStickServo.setPosition(pos);
+	}
 
     /**
      * Sets the front left motor speed

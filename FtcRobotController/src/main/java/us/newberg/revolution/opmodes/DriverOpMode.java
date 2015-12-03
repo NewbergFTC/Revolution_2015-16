@@ -5,6 +5,8 @@ import com.qualcomm.ftccommon.DbgLog;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 import us.newberg.revolution.CameraHandler;
+import us.newberg.revolution.DriveTimer;
+import us.newberg.revolution.ServoTimer;
 
 /**
  * Revolution 2015-2016
@@ -16,6 +18,9 @@ public class DriverOpMode extends RevOpMode
     public void Initialize()
     {
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        // TODO(Peacock): Make the positions const 
+		_leftStickServo.setPosition(0);
+		_rightStickServo.setPosition(0.45f);
     }
 
     @Override
@@ -52,6 +57,11 @@ public class DriverOpMode extends RevOpMode
 		if (gamepad1.a)
 		{
 			_leftStickServo.setPosition(0.45f);
+			_rightStickServo.setPosition(0.45f);
+
+			_servoTimer.Terminate();
+			_servoTimer = new ServoTimer(this, 5000);
+			_servoTimer.start();
 		}
 
 		if (gamepad1.b)
@@ -59,11 +69,16 @@ public class DriverOpMode extends RevOpMode
 
 		if (gamepad1.x)
 		{
-			_rightStickServo.setPosition(0.45f);
+			_rightStickServo.setPosition(0);
+			_leftStickServo.setPosition(0);
+
+			_servoTimer.Terminate();
+			_servoTimer = new ServoTimer(this, 5000);
+			_servoTimer.start();
 		}
 
 		if (gamepad1.y)
-			_rightStickServo.setPosition(0);
+			_rightStickServo.setPosition(0.45f);
 
         Drive(leftPower, rightPower);
 
