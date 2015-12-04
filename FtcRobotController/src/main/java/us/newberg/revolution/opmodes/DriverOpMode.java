@@ -15,7 +15,17 @@ public class DriverOpMode extends RevOpMode
     @Override
     public void Initialize()
     {
-        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+		try 
+		{
+        	_frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+			Wait();
+
+        	_frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
+        	Wait();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
@@ -37,7 +47,7 @@ public class DriverOpMode extends RevOpMode
         float leftX = Scale(leftXOne);
 
         if (leftX > 0)
-        {
+		{
             leftPower += leftX;
             rightPower -= rightPower > 0 ? leftX * 2 : leftX;
         }
@@ -49,29 +59,23 @@ public class DriverOpMode extends RevOpMode
 
 		if (gamepad1.a)
 		{
-			_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
-			_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
-
-			_servoTimer.Terminate();
-			_servoTimer = new ServoTimer(this, 5000);
-			_servoTimer.start();
+			DeployLeftServo();
+			
+			StartServoTimer(8000);
 		}
-
-		if (gamepad1.b)
-			_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 
 		if (gamepad1.x)
 		{
-			_rightStickServo.setPosition(Reference.RIGHT_SERVO_DEPLOYED);
-			_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
-
-			_servoTimer.Terminate();
-			_servoTimer = new ServoTimer(this, 5000);
-			_servoTimer.start();
+			DeployRightServo();
+			
+			StartServoTimer(8000);
 		}
 
+		if (gamepad1.b)
+			RaiseLeftServo();
+
 		if (gamepad1.y)
-			_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
+			RaiseRightServo();
 
         Drive(leftPower, rightPower);
 
