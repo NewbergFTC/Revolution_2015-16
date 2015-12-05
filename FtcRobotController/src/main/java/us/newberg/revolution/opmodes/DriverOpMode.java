@@ -15,17 +15,7 @@ public class DriverOpMode extends RevOpMode
     @Override
     public void Initialize()
     {
-		try 
-		{
-        	_frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-			Wait();
-
-        	_frontLeftMotor.setMode(DcMotorController.RunMode.RUN_WITHOUT_ENCODERS);
-        	Wait();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+        _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
 
 		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
@@ -59,16 +49,14 @@ public class DriverOpMode extends RevOpMode
 
 		if (gamepad1.a)
 		{
-			DeployLeftServo();
-			
-			StartServoTimer(8000);
+			DeployLeftServo();	
+			StartServoTimer(5000);
 		}
 
 		if (gamepad1.x)
 		{
-			DeployRightServo();
-			
-			StartServoTimer(8000);
+			DeployRightServo();			
+			StartServoTimer(5000);
 		}
 
 		if (gamepad1.b)
@@ -77,7 +65,8 @@ public class DriverOpMode extends RevOpMode
 		if (gamepad1.y)
 			RaiseRightServo();
 
-        Drive(leftPower, rightPower);
+	//	Drive(0.2f, 0.2f);
+       Drive(leftPower, rightPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
@@ -87,7 +76,7 @@ public class DriverOpMode extends RevOpMode
     private float Scale(float value)
     {
         // TODO(Peacock): Adjust these values to the driver's liking
-        float[] scaleArray = { 0.0f, 0.05f, 0.09f, 0.10f, 0.12f, 0.15f, 0.18f, 0.24f,
+        float[] scaleArray = { 0.0f, 0.05f, 0.09f, 0.13f, 0.14f, 0.17f, 0.20f, 0.24f,
                                0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 0.95f, 1.00f };
 
         int index = Math.abs(Util.RoundReal(value * (scaleArray.length - 1)));

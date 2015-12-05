@@ -89,6 +89,9 @@ public class RevOpMode extends LinearOpMode
 		Wait();
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
+		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
     }
 
     /**
@@ -100,8 +103,8 @@ public class RevOpMode extends LinearOpMode
     public void Drive(float leftPower, float rightPower)
     {
     	// TODO(Peacock): Is the left side drifting?
-    	// Yes it is, at low speeds
-        double leftSpd = Util.Clampd(leftPower, -1.0, 1.0);
+    	// yes it is, at low speeds
+		double leftSpd = Util.Clampd(leftPower, -1.0, 1.0);
         double rightSpd = Util.Clampd(rightPower, -1.0, 1.0);
 
         _frontLeftMotor.setPower(-leftSpd);

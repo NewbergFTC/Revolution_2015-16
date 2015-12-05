@@ -14,15 +14,40 @@ public class AutoRedOpMode extends RevOpMode
 
         waitForStart();
 
-        AutoDrive(0.5f, 23.2f);
-        sleep(10000);
-        Turn(-30, 0.25f);
+        AutoDrive(0.8f, 23f);
         sleep(1500);
-        AutoDrive(0.5f, 54f);
+        Turn(-28, 0.6f);
         sleep(1500);
-        Turn(-31, 0.2f);
+        AutoDrive(1.0f, 54);
         sleep(1500);
-        AutoDrive(1.0f, 38);
+        Turn(-15, 0.6f);
         sleep(1500);
+        AutoDrive(1.0f, 30);
+        sleep(1500);
+       
+       	// Do a little dance
+       	// Sing a little song
+       	// Get down tonight
+       	DeployLeftServo();
+       	sleep(500);
+       	DeployRightServo();
+       	sleep(500);
+       	DeployLeftServo();
+       	sleep(500);
+       	DeployRightServo();
+       	sleep(500);
+       	DeployLeftServo();
+       	sleep(500);
+       	DeployRightServo();
+       	sleep(500);
+       	DeployLeftServo();
+       	sleep(500);
+       	DeployRightServo();
+       	sleep(500);
+       	DeployLeftServo();
+       	sleep(500);
+       	DeployRightServo();
+       	sleep(500);
+       	RaiseRightServo();
     }
 }
