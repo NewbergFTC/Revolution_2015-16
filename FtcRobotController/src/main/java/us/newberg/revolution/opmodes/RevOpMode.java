@@ -1,5 +1,8 @@
 package us.newberg.revolution.opmodes;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+
 import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,6 +39,9 @@ public class RevOpMode extends LinearOpMode
 
 	// Servo timer
 	protected ServoTimer _servoTimer;
+
+    protected MediaPlayer _player;
+    public static Context CONTEXT;
 
     public RevOpMode()
     {
@@ -128,7 +134,7 @@ public class RevOpMode extends LinearOpMode
         _timer = new DriveTimer(this, millis);
 
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-		Wait();
+        Wait();
 
         _timer.start();
         Drive(leftPower, rightPower);
@@ -390,5 +396,15 @@ public class RevOpMode extends LinearOpMode
         float spd = Util.Clampf(speed, -1.0f, 1.0f);
 
         _backRightMotor.setPower(spd);
+    }
+
+    public static void SetAppContext(Context context)
+    {
+        CONTEXT = context;
+    }
+
+    public static Context GetAppContext()
+    {
+        return CONTEXT;
     }
 }

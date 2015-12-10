@@ -42,6 +42,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.usb.UsbManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -75,6 +76,7 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 
 import us.newberg.revolution.CameraHandler;
+import us.newberg.revolution.opmodes.RevOpMode;
 
 public class FtcRobotControllerActivity extends Activity {
 
@@ -151,6 +153,8 @@ public class FtcRobotControllerActivity extends Activity {
       // 9474
      // _camera = Camera.open();
       //CameraHandler.GetInstance().SetContext(getApplicationContext());
+
+    RevOpMode.SetAppContext(this);
       // 9474
 
     utility = new Utility(this);
@@ -206,14 +210,13 @@ public class FtcRobotControllerActivity extends Activity {
 
     entireScreenLayout.setOnTouchListener(new View.OnTouchListener()
     {
-        @Override
-        public boolean onTouch(View v, MotionEvent event)
-        {
-            dimmer.handleDimTimer();
-            return false;
-        }
+      @Override
+      public boolean onTouch(View v, MotionEvent event)
+      {
+        dimmer.handleDimTimer();
+        return false;
+      }
     });
-
   }
 
   @Override

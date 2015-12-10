@@ -1,7 +1,19 @@
 package us.newberg.revolution.opmodes;
 
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
+import android.content.res.Resources;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Environment;
+
 import com.peacock.common.math.Util;
+import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.hardware.DcMotorController;
+
+import java.io.File;
+import java.io.IOException;
 
 import us.newberg.revolution.ServoTimer;
 import us.newberg.revolution.lib.Reference;
