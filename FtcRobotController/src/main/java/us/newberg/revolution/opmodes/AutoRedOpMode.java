@@ -1,16 +1,11 @@
 package us.newberg.revolution.opmodes;
 
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Environment;
-
-import java.io.File;
 
 /**
  * Revolution 2015-2016
  * FTC team 9474
  */
-// TODO(Peacock): Update this to use encoders
 public class AutoRedOpMode extends RevOpMode
 {
     @Override
@@ -18,12 +13,10 @@ public class AutoRedOpMode extends RevOpMode
     {
         super.Init();
 
-		_player = MediaPlayer.create(GetAppContext(), Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "/lee.m4a")));
-		_player.setVolume(1, 1);
-
 		waitForStart();
 
-		_player.start();
+		if (GetAppContext() != null)
+			_player.start();
 
         AutoDrive(0.8f, 23f);
         sleep(1500);

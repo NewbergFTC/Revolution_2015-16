@@ -2,6 +2,8 @@ package us.newberg.revolution.opmodes;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Environment;
 
 import com.peacock.common.math.Util;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,6 +14,8 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import us.newberg.revolution.DriveTimer;
 import us.newberg.revolution.ServoTimer;
 import us.newberg.revolution.lib.Reference;
+
+import java.io.File;
 
 /**
  * Revolution 2015-2016
@@ -41,7 +45,7 @@ public class RevOpMode extends LinearOpMode
 	protected ServoTimer _servoTimer;
 
     protected MediaPlayer _player;
-    public static Context CONTEXT;
+    private static Context CONTEXT;
 
     public RevOpMode()
     {
@@ -98,6 +102,12 @@ public class RevOpMode extends LinearOpMode
 
 		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
+
+		if (GetAppContext() != null)
+		{
+        	_player = MediaPlayer.create(GetAppContext(), Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "/lee.m4a")));
+        	_player.setVolume(1, 1);
+		}
     }
 
     /**
