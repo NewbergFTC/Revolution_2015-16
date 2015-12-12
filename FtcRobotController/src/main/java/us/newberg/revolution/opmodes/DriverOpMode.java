@@ -1,18 +1,9 @@
 package us.newberg.revolution.opmodes;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
-import android.content.res.Resources;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Environment;
-
 import com.peacock.common.math.Util;
 import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import java.io.File;
 import java.io.IOException;
 
 import us.newberg.revolution.ServoTimer;
@@ -75,6 +66,12 @@ public class DriverOpMode extends RevOpMode
 		if (gamepad1.y)
 			RaiseRightServo();
 
+		if (gamepad1.dpad_left)
+			RaiseDoor();
+
+		if (gamepad1.dpad_right)
+			LowerDoor();
+
         Drive(leftPower, rightPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
@@ -84,8 +81,7 @@ public class DriverOpMode extends RevOpMode
     // Based off the K9TankDrive scale function
     private float Scale(float value)
     {
-        // TODO(Peacock): Adjust these values to the driver's liking
-        float[] scaleArray = { 0.0f, 0.05f, 0.09f, 0.13f, 0.14f, 0.17f, 0.20f, 0.24f,
+        float[] scaleArray = { 0.00f, 0.05f, 0.09f, 0.13f, 0.14f, 0.17f, 0.20f, 0.24f,
                                0.30f, 0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 0.95f, 1.00f };
 
         int index = Math.abs(Util.RoundReal(value * (scaleArray.length - 1)));
@@ -93,8 +89,6 @@ public class DriverOpMode extends RevOpMode
         if (index > scaleArray.length - 1)
             index = scaleArray.length - 1;
 
-        boolean negative = value < 0;
-
-        return negative ? -scaleArray[index] : scaleArray[index];
+        return value < 0 ? -scaleArray[index] : scaleArray[index];
     }
 }

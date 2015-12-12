@@ -37,6 +37,9 @@ public class RevOpMode extends LinearOpMode
 	protected Servo _leftStickServo;
 	protected Servo _rightStickServo;
 
+	// Door servo
+	protected Servo _doorServo;
+
     // Drive timer
     // For timed autonomous stuff
     protected DriveTimer _timer;
@@ -92,6 +95,8 @@ public class RevOpMode extends LinearOpMode
 		_leftStickServo = hardwareMap.servo.get("leftStick");
 		_rightStickServo = hardwareMap.servo.get("rightStick");
 
+		_doorServo = hardwareMap.servo.get("door");
+
         _frontLeftMotor.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 		Wait();
 
@@ -102,6 +107,7 @@ public class RevOpMode extends LinearOpMode
 
 		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
 		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
+		 LowerDoor();
 
 		if (GetAppContext() != null)
 		{
@@ -120,7 +126,7 @@ public class RevOpMode extends LinearOpMode
     {
     	// TODO(Peacock): Is the left side drifting?
     	// yes it is, at low speeds
-		double leftSpd = Util.Clampd(leftPower, -1.0, 1.0);
+		double leftSpd = Util.Clampd(leftPower * 1.1, -1.0, 1.0);
         double rightSpd = Util.Clampd(rightPower, -1.0, 1.0);
 
         _frontLeftMotor.setPower(-leftSpd);
@@ -171,20 +177,22 @@ public class RevOpMode extends LinearOpMode
         waitOneFullHardwareCycle();
     }
 
-	/**
-	 * Deploys the left stick, and raises the right stick
-	 *
-	 */
+	public void LowerDoor()
+	{
+		_doorServo.setPosition(0);
+	}
+
+	public void RaiseDoor()
+	{
+		_doorServo.setPosition(0.5f);
+	}
+
 	public void DeployLeftServo()
 	{
 		_leftStickServo.setPosition(Reference.LEFT_SERVO_DEPLOYED);
 		_rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
 	}
 
-	/**
-	 * Deploys the right stick, and raises the left stick
-	 *
-	 */
 	public void DeployRightServo()
 	{
 		_leftStickServo.setPosition(Reference.LEFT_SERVO_UP);

@@ -18,7 +18,7 @@ public class AutoBlueOpMode extends RevOpMode
 		if (GetAppContext() != null)
 			_player.start();
 
-        AutoDrive(0.8f, 23f);
+        AutoDrive(0.8f, 21f);
         sleep(1500);
         Turn(28, 0.6f);
         sleep(1500);
@@ -26,7 +26,7 @@ public class AutoBlueOpMode extends RevOpMode
         sleep(1500);
         Turn(15, 0.6f);
         sleep(1500);
-        AutoDrive(1.0f, 30);
+        AutoDrive(1.0f, 33);
         sleep(1500);
        
        	// Do a little dance
