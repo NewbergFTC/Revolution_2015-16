@@ -80,10 +80,6 @@ import us.newberg.revolution.opmodes.RevOpMode;
 
 public class FtcRobotControllerActivity extends Activity {
 
-    // 9474
-    public static final String REQUEST_IMAGE_CAPTURE = "REV_TAKE_PHOTO";
-    private Camera _camera;
-    // 9474
 
   private static final int REQUEST_CONFIG_WIFI_CHANNEL = 1;
   private static final boolean USE_DEVICE_EMULATION = false;
@@ -149,13 +145,6 @@ public class FtcRobotControllerActivity extends Activity {
     super.onCreate(savedInstanceState);
 
     setContentView(R.layout.activity_ftc_controller);
-
-      // 9474
-     // _camera = Camera.open();
-      //CameraHandler.GetInstance().SetContext(getApplicationContext());
-
-    RevOpMode.SetAppContext(this);
-      // 9474
 
     utility = new Utility(this);
     context = this;
