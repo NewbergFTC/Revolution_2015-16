@@ -6,17 +6,17 @@ package us.newberg.revolution.opmodes;
  */
 public class TestOpMode extends RevOpMode
 {
-  @Override public void runOpMode() throws InterruptedException
-  {
-    super.Init();
-
-    waitForStart();
-
-    while (opModeIsActive())
+    @Override public void runOpMode() throws InterruptedException
     {
-      Drive(0.1f, 0.1f);
+        super.Init();
 
-      waitForNextHardwareCycle();
+        waitForStart();
+
+        while (opModeIsActive())
+        {
+            Drive(0.1f, 0.1f);
+
+            waitForNextHardwareCycle();
+        }
     }
-  }
 }
