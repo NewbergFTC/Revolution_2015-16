@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GitStats - Revolution_2015-16</title>
+    <meta charset='utf-8'>
+    <link href='../assets/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <style>
+      body { padding-top: 60px; }
+    </style>
+    <link href='../assets/bootstrap/css/bootstrap-responsive.min.css' rel='stylesheet' type='text/css'>
+    <script src='../assets/jquery.min.js' type='text/javascript'></script>
+    <script src='../assets/bootstrap/js/bootstrap.min.js' type='text/javascript'></script>
+    <script src='../assets/highstock.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='navbar navbar-fixed-top'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <a class='btn btn-navbar' data-target='.nav-collapse' data-toggle='collapse'>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+            <span class='icon-bar'></span>
+          </a>
+          <a class='brand' href='../index.html'>GitStats - Revolution_2015-16</a>
+          <div class='nav-collapse collapse'>
+            <ul class='nav'>
+              <li class=''>
+                <a href='../general.html'>General</a>
+              </li>
+              <li class=''>
+                <a href='../activity/by_date.html'>Activity</a>
+              </li>
+              <li class=''>
+                <a href='../authors/best_authors.html'>Authors</a>
+              </li>
+              <li class=''>
+                <a href='../files/by_date.html'>Files</a>
+              </li>
+              <li class='active'>
+                <a href='by_date.html'>Lines</a>
+              </li>
+              <li class=''>
+                <a href='../comments/by_date.html'>Comments</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <div class='tabbable tabs-left'>
+        <ul class='nav nav-tabs'>
+          <li class='active'>
+            <a href='by_date.html'>Lines by date</a>
+          </li>
+          <li class=''>
+            <a href='by_extension.html'>Lines by extension</a>
+          </li>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active'>
+            <div class='page-header'>
+              <h1 class='pagination-centered'>Lines by date</h1>
+            </div>
+                    <script type="text/javascript">
+                    (function() {
+                      var onload = window.onload;
+                      window.onload = function(){
+                        if (typeof onload == "function") onload();
+                                var options = { "title": { "text": "" },"legend": { "enabled": false },"xAxis": { "title": { "text": null } },"yAxis": { "title": { "text": "Lines" },"labels": {  } },"tooltip": { "enabled": true },"credits": { "enabled": false },"plotOptions": { "areaspline": {  } },"chart": { "defaultSeriesType": "line","renderTo": "lines_by_date" },"subtitle": {  },"series": [{ "name": "Lines by date","type": "spline","data": [ [ 1442793600000,43427 ],[ 1442880000000,43427 ],[ 1442966400000,43427 ],[ 1443052800000,43429 ],[ 1443139200000,47261 ],[ 1443225600000,47261 ],[ 1443312000000,47261 ],[ 1443398400000,47261 ],[ 1443484800000,57575 ],[ 1443571200000,57805 ],[ 1443657600000,57807 ],[ 1443744000000,57807 ],[ 1443830400000,57807 ],[ 1443916800000,57807 ],[ 1444003200000,57807 ],[ 1444089600000,88000 ],[ 1444176000000,88000 ],[ 1444262400000,88000 ],[ 1444348800000,88000 ],[ 1444435200000,88000 ],[ 1444521600000,88000 ],[ 1444608000000,88000 ],[ 1444694400000,88074 ],[ 1444780800000,88074 ],[ 1444867200000,88085 ],[ 1444953600000,88085 ],[ 1445040000000,88085 ],[ 1445126400000,88085 ],[ 1445212800000,88085 ],[ 1445299200000,88087 ],[ 1445385600000,88087 ],[ 1445472000000,88087 ],[ 1445558400000,88087 ],[ 1445644800000,88087 ],[ 1445731200000,88087 ],[ 1445817600000,88087 ],[ 1445904000000,88087 ],[ 1445990400000,88087 ],[ 1446076800000,88132 ],[ 1446163200000,88132 ],[ 1446249600000,88132 ],[ 1446336000000,88132 ],[ 1446422400000,88160 ],[ 1446508800000,88160 ],[ 1446595200000,88242 ],[ 1446681600000,88171 ],[ 1446768000000,88194 ],[ 1446854400000,88443 ],[ 1446940800000,88443 ],[ 1447027200000,88443 ],[ 1447113600000,88452 ],[ 1447200000000,88452 ],[ 1447286400000,88452 ],[ 1447372800000,88426 ],[ 1447459200000,88426 ],[ 1447545600000,88426 ],[ 1447632000000,88426 ],[ 1447718400000,88461 ],[ 1447804800000,88464 ],[ 1447891200000,88491 ],[ 1447977600000,88534 ],[ 1448064000000,88534 ],[ 1448150400000,88534 ],[ 1448236800000,88534 ],[ 1448323200000,88534 ],[ 1448409600000,88534 ],[ 1448496000000,88534 ],[ 1448582400000,88534 ],[ 1448668800000,88534 ],[ 1448755200000,88534 ],[ 1448841600000,88534 ],[ 1448928000000,88541 ],[ 1449014400000,88642 ],[ 1449100800000,88684 ],[ 1449187200000,88722 ],[ 1449273600000,88722 ],[ 1449360000000,88722 ],[ 1449446400000,88722 ],[ 1449532800000,88722 ],[ 1449619200000,88774 ],[ 1449705600000,88768 ],[ 1449792000000,88774 ],[ 1449878400000,88855 ],[ 1449964800000,88855 ],[ 1450051200000,88855 ],[ 1450137600000,88762 ] ] }] };
+                    
+                    window.chart_lines_by_date = new Highcharts.StockChart(options);
+            
+                      };
+                    })()
+                    </script>
+            <div id="lines_by_date"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
