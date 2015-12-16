@@ -15,7 +15,6 @@ import us.newberg.revolution.lib.Reference;
  */
 public class DriverOpMode extends RevOpMode
 {
-    // TODO(Peacock): Find out what clang-format option will new line java annotations
     @Override public void Initialize()
     {
         _frontController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);

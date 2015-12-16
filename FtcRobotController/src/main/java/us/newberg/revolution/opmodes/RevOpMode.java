@@ -57,6 +57,7 @@ public class RevOpMode extends LinearOpMode
         _servoTimer = new ServoTimer(this, 0);
     }
 
+    // TODO(Peacock): Find out what clang-format option will new line java annotations
     @Override public void runOpMode() throws InterruptedException
     {
         Init();
@@ -114,6 +115,26 @@ public class RevOpMode extends LinearOpMode
     }
 
     /**
+     * Waits for 1+5 hardware cycles
+     */
+    public void Wait() throws InterruptedException
+    {
+        waitForNextHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+    }
+
+    public void StartServoTimer(long millis)
+    {
+        _servoTimer.Terminate();
+        _servoTimer = new ServoTimer(this, millis);
+        _servoTimer.start();
+    }
+
+    /**
      * Sets the drive motors to their respective powers
      *
      * @param leftPower  Left side motor power (-1, 1)
@@ -160,46 +181,6 @@ public class RevOpMode extends LinearOpMode
         {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Waits for 1+5 hardware cycles
-     */
-    public void Wait() throws InterruptedException
-    {
-        waitForNextHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-        waitOneFullHardwareCycle();
-    }
-
-    public void LowerDoor() { _doorServo.setPosition(0.5f); }
-
-    public void RaiseDoor() { _doorServo.setPosition(0); }
-
-    public void DeployLeftServo()
-    {
-        _leftStickServo.setPosition(Reference.LEFT_SERVO_DEPLOYED);
-        _rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
-    }
-
-    public void DeployRightServo()
-    {
-        _leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
-        _rightStickServo.setPosition(Reference.RIGHT_SERVO_DEPLOYED);
-    }
-
-    public void RaiseLeftServo() { _leftStickServo.setPosition(Reference.LEFT_SERVO_UP); }
-
-    public void RaiseRightServo() { _rightStickServo.setPosition(Reference.RIGHT_SERVO_UP); }
-
-    public void StartServoTimer(long millis)
-    {
-        _servoTimer.Terminate();
-        _servoTimer = new ServoTimer(this, millis);
-        _servoTimer.start();
     }
 
     /**
@@ -330,6 +311,24 @@ public class RevOpMode extends LinearOpMode
         Wait();
 
         Drive(0, 0);
+    }
+
+    public void LowerDoor() { _doorServo.setPosition(Reference.DOOR_SERVO_LOWER); }
+    public void RaiseDoor() { _doorServo.setPosition(Reference.DOOR_SERVO_RAISE); }
+
+    public void RaiseLeftServo() { _leftStickServo.setPosition(Reference.LEFT_SERVO_UP); }
+    public void RaiseRightServo() { _rightStickServo.setPosition(Reference.RIGHT_SERVO_UP); }
+
+    public void DeployLeftServo()
+    {
+        _leftStickServo.setPosition(Reference.LEFT_SERVO_DEPLOYED);
+        _rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
+    }
+
+    public void DeployRightServo()
+    {
+        _leftStickServo.setPosition(Reference.LEFT_SERVO_UP);
+        _rightStickServo.setPosition(Reference.RIGHT_SERVO_DEPLOYED);
     }
 
     /**

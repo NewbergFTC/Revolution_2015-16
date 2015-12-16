@@ -56,7 +56,7 @@ public class ServoTimer extends Thread
                 return;
         }
 
-        _target.SetLeftStickPosition(0);
-        _target.SetRightStickPosition(0.45f);
+        _target.SetLeftStickPosition(Reference.LEFT_SERVO_UP);
+        _target.SetRightStickPosition(Reference.RIGHT_SERVO_UP);
     }
 }

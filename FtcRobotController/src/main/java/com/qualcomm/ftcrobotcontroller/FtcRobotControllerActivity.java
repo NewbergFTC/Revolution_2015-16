@@ -75,9 +75,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 
-import us.newberg.revolution.CameraHandler;
-import us.newberg.revolution.opmodes.RevOpMode;
-
 public class FtcRobotControllerActivity extends Activity {
 
 
