@@ -1,12 +1,8 @@
 package us.newberg.revolution.opmodes;
 
 import com.peacock.common.math.Util;
-import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import java.io.IOException;
-
-import us.newberg.revolution.ServoTimer;
 import us.newberg.revolution.lib.Reference;
 
 /**
@@ -40,7 +36,7 @@ public class DriverOpMode extends RevOpMode
             leftPower += leftX;
             rightPower -= rightPower > 0 ? leftX * 2 : leftX;
         }
-        else if (leftX < 0)
+        else
         {
             leftPower += leftPower > 0 ? leftX * 2 : leftX;
             rightPower -= leftX;

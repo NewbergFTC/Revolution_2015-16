@@ -39,10 +39,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.hardware.Camera;
 import android.hardware.usb.UsbManager;
-import android.media.MediaPlayer;
+
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;

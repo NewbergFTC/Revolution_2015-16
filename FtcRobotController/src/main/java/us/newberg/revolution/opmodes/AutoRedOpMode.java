@@ -1,6 +1,5 @@
 package us.newberg.revolution.opmodes;
 
-import android.media.MediaPlayer;
 
 /**
  * Revolution 2015-2016
