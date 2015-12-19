@@ -3,6 +3,7 @@ package us.newberg.revolution;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicBoolean;
 import us.newberg.revolution.opmodes.RevOpMode;
+import us.newberg.revolution.lib.Reference;
 
 public class ServoTimer extends Thread
 {
