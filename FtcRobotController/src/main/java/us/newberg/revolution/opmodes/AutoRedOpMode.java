@@ -19,7 +19,7 @@ public class AutoRedOpMode extends RevOpMode
         sleep(1000);
         Turn(-18, 0.8f);
         sleep(1500);
-        AutoDrive(1.0f, 64.5);
+        AutoDrive(1.0f, 64.5f);
         sleep(1000);
         Turn(-11, 0.8f);
         sleep(500);
