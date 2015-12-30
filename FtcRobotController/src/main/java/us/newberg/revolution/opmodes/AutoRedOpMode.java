@@ -1,6 +1,5 @@
 package us.newberg.revolution.opmodes;
 
-
 /**
  * Revolution 2015-2016
  * FTC team 9474
@@ -35,10 +34,10 @@ public class AutoRedOpMode extends RevOpMode
         sleep(500);
         AutoDrive(1.0f, 12);
         sleep(500);
-		AutoDrive(0.5f, -2);
-		sleep(500);
-		LowerDoor();
-		sleep(1000);
+        AutoDrive(0.5f, -2);
+        sleep(500);
+        LowerDoor();
+        sleep(1000);
 
         // Do a little dance
         // Sing a little song

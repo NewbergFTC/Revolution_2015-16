@@ -25,9 +25,15 @@ public class DriverOpMode extends RevOpMode
         float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
         float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
 
+		float rightYTwo = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f); 
+		float rightXTwo = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
+
         // Calculate tank drive speed for each side
         float leftPower = Scale(leftYOne);
         float rightPower = Scale(leftYOne);
+
+		float leftArmPower = rightYTwo;
+		float rightArmPower = leftArmPower;
 
         float leftX = Scale(leftXOne);
 
@@ -68,6 +74,9 @@ public class DriverOpMode extends RevOpMode
 
         Drive(leftPower, rightPower);
 
+		SetArmLeftSpeed(leftArmPower);
+		SetArmRightSpeed(rightArmPower);
+
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
     }
@@ -83,6 +92,8 @@ public class DriverOpMode extends RevOpMode
         if (index > scaleArray.length - 1)
             index = scaleArray.length - 1;
 
+        _frontController = hardwareMap.dcMotorController.get("frontCon");
+        _backController = hardwareMap.dcMotorController.get("backCon");
         return value < 0 ? -scaleArray[index] : scaleArray[index];
     }
 }

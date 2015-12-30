@@ -28,9 +28,16 @@ public class RevOpMode extends LinearOpMode
     protected DcMotor _backLeftMotor;
     protected DcMotor _backRightMotor;
 
+    // Arm motors
+    protected DcMotor _armLeftMotor;
+    protected DcMotor _armRightMotor;
+    protected DcMotor _armTiltMotor; // We may not need this
+
     // Motor controllers
     protected DcMotorController _frontController;
     protected DcMotorController _backController;
+    protected DcMotorController _armPullController;
+    protected DcMotorController _armTiltController;
 
     // Stick servos
     protected Servo _leftStickServo;
@@ -87,8 +94,14 @@ public class RevOpMode extends LinearOpMode
         _backLeftMotor = hardwareMap.dcMotor.get("backLeft");
         _backRightMotor = hardwareMap.dcMotor.get("backRight");
 
+        _armLeftMotor = hardwareMap.dcMotor.get("armLeft");
+        _armRightMotor = hardwareMap.dcMotor.get("armRight");
+        _armTiltMotor = hardwareMap.dcMotor.get("armTilt");
+
         _frontController = hardwareMap.dcMotorController.get("frontCon");
         _backController = hardwareMap.dcMotorController.get("backCon");
+        _armPullController = hardwareMap.dcMotorController.get("pullCon");
+        _armTiltController = hardwareMap.dcMotorController.get("tiltCon");
 
         _leftStickServo = hardwareMap.servo.get("leftStick");
         _rightStickServo = hardwareMap.servo.get("rightStick");
@@ -107,6 +120,7 @@ public class RevOpMode extends LinearOpMode
         _rightStickServo.setPosition(Reference.RIGHT_SERVO_UP);
         LowerDoor();
 
+        // TODO(Peacock): Up the volume
         _player = MediaPlayer.create(
             hardwareMap.appContext,
             Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath() + "/lee.m4a")));
@@ -398,5 +412,27 @@ public class RevOpMode extends LinearOpMode
         float spd = Util.Clampf(speed, -1.0f, 1.0f);
 
         _backRightMotor.setPower(spd);
+    }
+
+    public void SetArmLeftSpeed(float speed)
+    {
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
+
+        _armLeftMotor.setPower(spd);
+    }
+
+    public void SetArmRightSpeed(float speed)
+    {
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
+
+        _armRightMotor.setPower(spd);
+    }
+
+    // TODO(Peacock): Make this degree based?
+    public void SetArmTiltSpeed(float speed)
+    {
+        float spd = Util.Clampf(speed, -1.0f, 1.0f);
+
+        _armTiltMotor.setPower(spd);
     }
 }
