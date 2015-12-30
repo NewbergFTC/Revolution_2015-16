@@ -16,7 +16,7 @@ public class AutoBlueOpMode extends RevOpMode
 
         AutoDrive(0.9f, 20f);
         sleep(1000);
-        Turn(18, 0.8f);
+        Turn(21, 0.8f);
         sleep(1500);
         AutoDrive(1.0f, 64.5f);
         sleep(1000);

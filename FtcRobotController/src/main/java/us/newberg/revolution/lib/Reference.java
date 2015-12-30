@@ -12,7 +12,7 @@ public class Reference
   public static final float WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * (float)Math.PI;
 
   // Stick Servos
-  public static final float LEFT_SERVO_DEPLOYED = 0.4f;
+  public static final float LEFT_SERVO_DEPLOYED = 0.45f;
   public static final float LEFT_SERVO_UP = 0.0f;
   public static final float RIGHT_SERVO_DEPLOYED = 0.0f;
   public static final float RIGHT_SERVO_UP = 0.50f;
