@@ -31,7 +31,7 @@ public class RevOpMode extends LinearOpMode
     // Arm motors
     protected DcMotor _armLeftMotor;
     protected DcMotor _armRightMotor;
-    protected DcMotor _armTiltMotor; // We may not need this
+    protected DcMotor _armTiltMotor; 
 
     // Motor controllers
     protected DcMotorController _frontController;
@@ -143,6 +143,7 @@ public class RevOpMode extends LinearOpMode
     public void StartServoTimer(long millis)
     {
         _servoTimer.Terminate();
+        _servoTimer.join();
         _servoTimer = new ServoTimer(this, millis);
         _servoTimer.start();
     }

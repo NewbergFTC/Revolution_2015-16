@@ -21,21 +21,24 @@ public class DriverOpMode extends RevOpMode
 
     @Override public void Update()
     {
-        // Get and scale the joystick values
-        float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
-        float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
+		// Arm values
+		float leftYTwo = Util.Clampf(gamepad2.left_stick_y, -1.0f, 1.0f); 
+		float leftXTwo = Util.Clampf(gamepad2.left_stick_x, -1.0f, 1.0f);
+		float rightYTwo  = Util.Clampf(gamepad2.right_stick_y, -1.0f, 1.0f); 
+			
+		// TODO(Peacock): Some kind of scaling
+		float leftArmPower = leftYTwo;
+		float rightArmPower = leftArmPower;
+		float armTiltPower = rightYTwo;
 
-		float rightYTwo = Util.Clampf(gamepad1.right_stick_y, -1.0f, 1.0f); 
-		float rightXTwo = Util.Clampf(gamepad1.right_stick_x, -1.0f, 1.0f);
+		// Drive values
+		float leftYOne = Util.Clampf(gamepad1.left_stick_y, -1.0f, 1.0f);
+		float leftXOne = Util.Clampf(gamepad1.left_stick_x, -1.0f, 1.0f);
 
         // Calculate tank drive speed for each side
-        float leftPower = Scale(leftYOne);
-        float rightPower = Scale(leftYOne);
-
-		float leftArmPower = rightYTwo;
-		float rightArmPower = leftArmPower;
-
-        float leftX = Scale(leftXOne);
+        float leftPower = DriveScale(leftYOne);
+		float rightPower = DriveScale(leftYOne);
+        float leftX = DriveScale(leftXOne);
 
         if (leftX > 0)
         {
@@ -76,13 +79,14 @@ public class DriverOpMode extends RevOpMode
 
 		SetArmLeftSpeed(leftArmPower);
 		SetArmRightSpeed(rightArmPower);
+		SetArmTiltSpeed(armTiltPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
     }
 
     // Based off the K9TankDrive scale function
-    private float Scale(float value)
+    private float DriveScale(float value)
     {
         float[] scaleArray = {0.00f, 0.05f, 0.09f, 0.13f, 0.14f, 0.17f, 0.20f, 0.24f, 0.30f,
                               0.36f, 0.43f, 0.50f, 0.60f, 0.72f, 0.85f, 0.95f, 1.00f};
