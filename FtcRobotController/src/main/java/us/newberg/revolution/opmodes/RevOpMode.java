@@ -55,6 +55,8 @@ public class RevOpMode extends LinearOpMode
 
     protected MediaPlayer _player;
 
+	protected boolean _armTiltLocked;
+
     public RevOpMode()
     {
         super();
@@ -142,10 +144,17 @@ public class RevOpMode extends LinearOpMode
 
     public void StartServoTimer(long millis)
     {
-        _servoTimer.Terminate();
-        _servoTimer.join();
-        _servoTimer = new ServoTimer(this, millis);
-        _servoTimer.start();
+    	try 
+		{
+        	_servoTimer.Terminate();
+        	_servoTimer.join();
+       		 _servoTimer = new ServoTimer(this, millis);
+        	_servoTimer.start();
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
     }
 
     /**

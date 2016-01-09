@@ -26,7 +26,7 @@ public class DriverOpMode extends RevOpMode
 		float leftXTwo = Util.Clampf(gamepad2.left_stick_x, -1.0f, 1.0f);
 		float rightYTwo  = Util.Clampf(gamepad2.right_stick_y, -1.0f, 1.0f); 
 			
-		// TODO(Peacock): Some kind of scaling
+		// TODO(Peacock): Some kind of scaling?
 		float leftArmPower = leftYTwo;
 		float rightArmPower = leftArmPower;
 		float armTiltPower = rightYTwo;
@@ -50,6 +50,10 @@ public class DriverOpMode extends RevOpMode
             leftPower += leftPower > 0 ? leftX * 2 : leftX;
             rightPower -= leftX;
         }
+
+        Drive(leftPower, rightPower);
+
+		// Servos
 
         if (gamepad1.a)
         {
@@ -75,11 +79,20 @@ public class DriverOpMode extends RevOpMode
         if (gamepad1.dpad_right)
             LowerDoor();
 
-        Drive(leftPower, rightPower);
+		// Arm
 
+		if (gamepad2.right_bumper)
+			_armTiltLocked = true;
+		else
+			_armTiltLocked = false;
+
+		if (!_armTiltLocked)
+			SetArmTiltSpeed(armTiltPower);
+		else	// TODO(Peacock): Some value that will lock the motors 
+			SetArmTiltSpeed(0);
+		
 		SetArmLeftSpeed(leftArmPower);
 		SetArmRightSpeed(rightArmPower);
-		SetArmTiltSpeed(armTiltPower);
 
         telemetry.addData("left tgt pwr", String.format("%.3f", leftPower));
         telemetry.addData("right tgt pwr", String.format("%.3f", rightPower));
