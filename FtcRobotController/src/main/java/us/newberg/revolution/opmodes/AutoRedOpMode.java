@@ -13,7 +13,9 @@ public class AutoRedOpMode extends RevOpMode
 
         waitForStart();
 
-        _player.start();
+//        AutoDrive(0.9f, 60.0f);
+//        sleep(1500);
+//        _player.start();
 
         AutoDrive(0.9f, 20f);
         sleep(1000);
